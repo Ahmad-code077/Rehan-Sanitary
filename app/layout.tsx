@@ -16,10 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Car Site',
-  description: 'A Car Rented Service',
+  title: 'Rehan Traders',
+  description: 'Rehan Sanitary Store',
   icons: {
-    icon: '/carlogo.jpg',
+    icon: '/rehan-sanitary.png',
   },
 };
 
