@@ -17,17 +17,12 @@ const HomePageSanitary: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl = 'http://localhost:3000';
-
-  console.log(apiUrl);
   useEffect(() => {
     const fetchSanitaryItems = async () => {
       try {
-        console.time('API Request');
-        const response = await axios.get(`${apiUrl}/api/sanitary-items`);
+        const response = await axios.get(`/api/sanitary-items`);
         setItems(response.data);
         setFilteredItems(response.data);
-        console.timeEnd('API Request');
       } catch (err) {
         const error = err as AxiosError<ErrorResponse>;
         setError(error.response?.data?.error || error.message);
@@ -37,7 +32,7 @@ const HomePageSanitary: React.FC = () => {
     };
 
     fetchSanitaryItems();
-  }, [apiUrl]);
+  }, []);
 
   console.log('data from the request', items);
   useEffect(() => {

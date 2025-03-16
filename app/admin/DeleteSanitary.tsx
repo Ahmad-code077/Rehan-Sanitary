@@ -16,11 +16,10 @@ const DeleteSanitaryPopup: React.FC<DeleteSanitaryPopupProps> = ({
   refreshSanitaryItems,
 }) => {
   const showToast = useShowToast();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
   const handleDeleteSanitary = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/sanitary-items/${itemId}`, {
+      const response = await fetch(`/api/sanitary-items/${itemId}`, {
         method: 'DELETE',
       });
 

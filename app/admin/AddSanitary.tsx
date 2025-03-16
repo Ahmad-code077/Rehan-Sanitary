@@ -41,13 +41,11 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
     resolver: zodResolver(sanitarySchema),
   });
 
-  const apiUrl = 'http://localhost:3000';
-
   // Handle form submission
   const handleAddSanitary = async (data: SanitaryFormValues) => {
     console.log('data', data);
     try {
-      const response = await fetch(`${apiUrl}/api/sanitary-items`, {
+      const response = await fetch(`/api/sanitary-items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

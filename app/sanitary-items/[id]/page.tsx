@@ -10,14 +10,13 @@ const SingleSanitaryItem: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const { id } = useParams();
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     if (!id) return;
 
     const fetchSanitaryItem = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/sanitary-items`);
+        const response = await fetch(`/api/sanitary-items`);
         if (!response.ok) {
           throw new Error('Failed to fetch sanitary item');
         }
@@ -41,7 +40,7 @@ const SingleSanitaryItem: React.FC = () => {
     };
 
     fetchSanitaryItem();
-  }, [id, apiUrl]);
+  }, [id]);
 
   if (loading)
     return (

@@ -32,12 +32,10 @@ const AdminPage = () => {
     }
   }, [router]);
 
-  const apiUrl = 'http://localhost:3000';
-
   // Fetch sanitary items
   const fetchSanitaryItems = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/sanitary-items`); // Updated API endpoint
+      const response = await fetch(`/api/sanitary-items`); // Updated API endpoint
       if (!response.ok) {
         throw new Error('Failed to fetch sanitary items.');
       }

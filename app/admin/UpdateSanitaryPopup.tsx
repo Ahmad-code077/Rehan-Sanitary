@@ -54,13 +54,11 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
     },
   });
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
   // Handle form submission
   const handleUpdateSanitary = async (data: SanitaryFormValues) => {
     console.log('data before sednigng the request ', data);
     try {
-      const response = await fetch(`${apiUrl}/api/sanitary-items/${item.id}`, {
+      const response = await fetch(`/api/sanitary-items/${item.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
