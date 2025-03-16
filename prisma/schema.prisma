@@ -1,0 +1,21 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model SanitaryItem {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  category    String
+  price       Float
+  quantity    Int
+  image       String
+  brand       String
+  availability Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
