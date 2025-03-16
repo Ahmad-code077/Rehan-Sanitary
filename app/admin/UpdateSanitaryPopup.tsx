@@ -58,6 +58,7 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
 
   // Handle form submission
   const handleUpdateSanitary = async (data: SanitaryFormValues) => {
+    console.log('data before sednigng the request ', data);
     try {
       const response = await fetch(`${apiUrl}/api/sanitary-items/${item.id}`, {
         method: 'PATCH',

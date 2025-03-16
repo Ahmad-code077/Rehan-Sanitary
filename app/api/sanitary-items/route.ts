@@ -67,13 +67,13 @@ export async function POST(request: Request) {
 // PATCH /api/sanitary-items/:id - Update a sanitary item
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { name, category, price, quantity, image, brand, availability } =
       await request.json();
 
-    const { id } = params;
+    const { id } = await params;
     console.log('id in the API file:', id);
 
     const updatedSanitaryItem = await prisma.sanitaryItem.update({

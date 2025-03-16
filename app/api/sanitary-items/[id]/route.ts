@@ -18,7 +18,7 @@ export async function PATCH(
     console.log('body', body);
     // Update the sanitary item in the database
     const updatedSanitaryItem = await prisma.sanitaryItem.update({
-      where: { id: id },
+      where: { id },
       data: body,
     });
 
@@ -41,11 +41,11 @@ export async function DELETE(
   {
     params,
   }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
   }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     console.log('Deleting sanitary item with ID:', id);
 
     if (!id) {
