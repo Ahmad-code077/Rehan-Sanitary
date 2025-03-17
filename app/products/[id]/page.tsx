@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { SanitaryItem } from '@/app/admin/SanitaryList'; // Adjust this import if needed
 import Image from 'next/image';
+import { SanitaryItem } from '@prisma/client';
 
 const SingleSanitaryItem: React.FC = () => {
   const [item, setItem] = useState<SanitaryItem | null>(null);
@@ -16,15 +16,14 @@ const SingleSanitaryItem: React.FC = () => {
 
     const fetchSanitaryItem = async () => {
       try {
-        const response = await fetch(`/api/sanitary-items`);
+        const response = await fetch(`/api/sanitary-items/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch sanitary item');
         }
-        const data: SanitaryItem[] = await response.json();
-        const foundItem = data.find((item: SanitaryItem) => item.id === id);
-
-        if (foundItem) {
-          setItem(foundItem);
+        const data: SanitaryItem = await response.json();
+        console.log(data);
+        if (data) {
+          setItem(data);
         } else {
           setError('Sanitary item not found');
         }
@@ -91,6 +90,9 @@ const SingleSanitaryItem: React.FC = () => {
                   </li> */}
                   <li className='text-lg text-gray-300'>
                     <strong>Price:</strong> PKR {item.price}
+                  </li>
+                  <li className='text-lg text-gray-300'>
+                    <strong>Quantity:</strong> {item.quantity}
                   </li>
                   <li
                     className={`text-lg font-semibold ${

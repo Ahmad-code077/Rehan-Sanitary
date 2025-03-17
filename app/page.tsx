@@ -1,4 +1,4 @@
-import HomePageSanitary from '@/components/HomePageSanitary';
+import HomePageSanitary from '@/components/ProductPageSanitary';
 import HeroSection from '@/components/HeroSection';
 
 const Home = () => {

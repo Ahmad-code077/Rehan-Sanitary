@@ -1,25 +1,6 @@
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
-
-// GET /api/sanitary-items - Fetch all sanitary items
-// export async function GET() {
-//   try {
-//     const sanitaryItems = await prisma.sanitaryItem.findMany();
-
-//     return NextResponse.json(sanitaryItems);
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       return NextResponse.json(
-//         { error: error.message || 'Failed to fetch sanitary items' },
-//         { status: 500 }
-//       );
-//     }
-//     return NextResponse.json(
-//       { error: 'An unknown error occurred' },
-//       { status: 500 }
-//     );
-//   }
-// }
 
 export async function GET(req: Request) {
   try {
@@ -27,30 +8,60 @@ export async function GET(req: Request) {
     const page = parseInt(url.searchParams.get('page') || '1', 10);
     const limit = parseInt(url.searchParams.get('limit') || '10', 10);
     const search = url.searchParams.get('search') || '';
+    const category = url.searchParams.get('category') || '';
+    const brand = url.searchParams.get('brand') || '';
+    const availability = url.searchParams.get('availability');
+    const sortBy = url.searchParams.get('sortBy') || 'latest'; // latest or price
+    const minPrice = parseInt(url.searchParams.get('minPrice') || '0', 10);
+    const maxPrice = parseInt(
+      url.searchParams.get('maxPrice') || '1000000',
+      10
+    );
 
     const skip = (page - 1) * limit;
 
-    // Fetch items with search filtering
+    // Build filter query
+    const filterConditions: Prisma.SanitaryItemWhereInput = {
+      price: { gte: minPrice, lte: maxPrice },
+    };
+
+    if (search) {
+      filterConditions.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { category: { contains: search, mode: 'insensitive' } },
+        { brand: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+    // Category filter (only apply if category is provided and not 'all')
+    if (category && category !== 'all') {
+      filterConditions.category = category;
+    }
+    if (brand && brand !== 'all') {
+      filterConditions.brand = brand;
+    }
+    if (availability !== null) {
+      if (availability === 'true' || availability === 'false') {
+        filterConditions.availability = availability === 'true';
+      }
+      // If availability is not 'true' or 'false', do not apply any filter (show all items)
+    }
+    const orderBy: Record<string, 'asc' | 'desc'> =
+      sortBy === 'priceAsc'
+        ? { price: 'asc' }
+        : sortBy === 'priceDesc'
+        ? { price: 'desc' }
+        : { createdAt: 'desc' };
+
+    // Fetch items with applied filters
     const items = await prisma.sanitaryItem.findMany({
-      where: {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { category: { contains: search, mode: 'insensitive' } },
-          { brand: { contains: search, mode: 'insensitive' } },
-        ],
-      },
+      where: filterConditions,
       skip,
       take: limit,
+      orderBy,
     });
 
     const totalItems = await prisma.sanitaryItem.count({
-      where: {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { category: { contains: search, mode: 'insensitive' } },
-          { brand: { contains: search, mode: 'insensitive' } },
-        ],
-      },
+      where: filterConditions,
     });
 
     return NextResponse.json({
@@ -78,16 +89,6 @@ export async function POST(request: Request) {
   try {
     const { name, category, price, quantity, image, brand, availability } =
       await request.json();
-
-    console.log('data', {
-      name,
-      category,
-      price,
-      quantity,
-      image,
-      brand,
-      availability,
-    });
 
     const newSanitaryItem = await prisma.sanitaryItem.create({
       data: {
@@ -126,7 +127,6 @@ export async function PATCH(
       await request.json();
 
     const { id } = await params;
-    console.log('id in the API file:', id);
 
     const updatedSanitaryItem = await prisma.sanitaryItem.update({
       where: { id: id },

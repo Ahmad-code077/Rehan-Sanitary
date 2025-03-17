@@ -6,14 +6,14 @@ import SanitaryList from './SanitaryList'; // Updated component name
 import AddSanitary from './AddSanitary'; // Updated component name
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/components/SearchBar';
-import { SanitaryItem } from './SanitaryList'; // Import SanitaryItem interface
+import { SanitaryItem } from '@prisma/client';
 
 const AdminPage = () => {
   const router = useRouter();
   const [sanitaryItems, setSanitaryItems] = useState<SanitaryItem[]>([]); // Updated state variable
-  const [filteredSanitaryItems, setFilteredSanitaryItems] = useState<
-    SanitaryItem[]
-  >([]); // Updated state variable
+  // const [filteredSanitaryItems, setFilteredSanitaryItems] = useState<
+  // SanitaryItem[]
+  // >([]); // Updated state variable
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showAddPopup, setShowAddPopup] = useState<boolean>(false);
 
@@ -40,25 +40,12 @@ const AdminPage = () => {
         throw new Error('Failed to fetch sanitary items.');
       }
       const data: SanitaryItem[] = await response.json();
-      setSanitaryItems(data);
-      setFilteredSanitaryItems(data); // Initialize filtered sanitary items
+      setSanitaryItems(data?.items);
+      // setFilteredSanitaryItems(data); // Initialize filtered sanitary items
     } catch (error) {
       console.error('Error fetching sanitary items:', error);
     }
   };
-
-  // Filter sanitary items based on search term
-  useEffect(() => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const filtered = sanitaryItems.filter(
-      (item) =>
-        item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-        item.category.toLowerCase().includes(lowerCaseSearchTerm) ||
-        item.quantity.toString().includes(lowerCaseSearchTerm) ||
-        item.brand.toLowerCase().includes(lowerCaseSearchTerm)
-    );
-    setFilteredSanitaryItems(filtered);
-  }, [searchTerm, sanitaryItems]);
 
   return (
     <div className='min-h-screen'>
@@ -76,17 +63,15 @@ const AdminPage = () => {
           +
         </Button>
       </div>
-
       {/* Search Bar Section */}
       <div className='flex justify-end'>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
-
       {/* Sanitary Items List Section */}
       <div>
-        {filteredSanitaryItems.length > 0 ? (
+        {sanitaryItems.length > 0 ? (
           <SanitaryList
-            sanitaryItems={filteredSanitaryItems}
+            sanitaryItems={sanitaryItems}
             refreshSanitaryItems={fetchSanitaryItems} // Updated prop name
           />
         ) : (
@@ -95,7 +80,6 @@ const AdminPage = () => {
           </p>
         )}
       </div>
-
       {/* Add Sanitary Item Popup */}
       {showAddPopup && (
         <AddSanitary

@@ -2,17 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import UpdateSanitaryPopup from './UpdateSanitaryPopup';
 import DeleteSanitary from './DeleteSanitary';
-
-export interface SanitaryItem {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  quantity: number;
-  image: string;
-  brand: string;
-  availability: boolean;
-}
+import { SanitaryItem } from '@prisma/client';
 
 interface SanitaryListProps {
   sanitaryItems: SanitaryItem[];

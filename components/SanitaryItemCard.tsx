@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { SanitaryItem } from '@/app/admin/SanitaryList';
 import Image from 'next/image';
+import { SanitaryItem } from '@prisma/client';
 
 interface SanitaryItemCardProps {
   item: SanitaryItem;
@@ -38,7 +38,7 @@ const SanitaryItemCard: React.FC<SanitaryItemCardProps> = ({ item }) => {
           {item.availability ? 'Available' : 'Not Available'}
         </p>
         <Link
-          href={`/sanitary/${item.id}`}
+          href={`/products/${item.id}`}
           className='text-primary hover:underline mt-2 block'
         >
           View Details

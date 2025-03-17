@@ -1,7 +1,31 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
-// PATCH /api/cars/:id - Update car by ID
+export async function GET(
+  request: Request,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>; // Directly destructure params instead of using Promise
+  }
+) {
+  const { id } = await params;
+  console.log('ids 🤣🤣🤣🤣', id);
+  try {
+    const data = await prisma.sanitaryItem.findUnique({ where: { id } });
+    return NextResponse.json(data, { status: 200 });
+  } catch (error: unknown) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to Fetch the sanitary item',
+      },
+      { status: 500 }
+    );
+  }
+}
 export async function PATCH(
   request: Request,
   {
@@ -12,10 +36,8 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params; // Destructure id from params
-    console.log('Received ID:', id);
 
     const body = await request.json(); // Get the update data from the request body
-    console.log('body', body);
     // Update the sanitary item in the database
     const updatedSanitaryItem = await prisma.sanitaryItem.update({
       where: { id },
@@ -46,7 +68,6 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    console.log('Deleting sanitary item with ID:', id);
 
     if (!id) {
       return NextResponse.json(
