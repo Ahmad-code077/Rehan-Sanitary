@@ -5,18 +5,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import React from 'react';
+import React, { useState } from 'react';
 
-import { SanitaryItem } from './SanitaryList'; // Assuming SanitaryList contains the sanitary item data
 import { useShowToast } from '@/components/Toast';
+import { SanitaryItem } from '@prisma/client';
+import CloudinaryUpload from '@/components/CloudinaryUpload';
 
-// Validation schema with preprocessing for numeric fields
+// Validation schema
 const sanitarySchema = z.object({
   name: z.string().min(1, 'Item Name is required'),
   category: z.string().min(1, 'Category is required'),
-  price: z.coerce.number().min(1, 'Price is required'), // Coerce strings to numbers
+  price: z.coerce.number().min(1, 'Price is required'),
   quantity: z.coerce.number().min(1, 'Quantity is required'),
-  image: z.string().url('Invalid image URL').min(1, 'Image URL is required'),
+  images: z.array(z.string()),
   brand: z.string().min(1, 'Brand is required'),
   availability: z.boolean(),
 });
@@ -35,6 +36,7 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
   refreshSanitaryItems,
 }) => {
   const showToast = useShowToast();
+  const [imageUrls, setImageUrls] = useState<string[]>(item.images || []);
 
   const {
     register,
@@ -48,22 +50,70 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
       category: item.category,
       price: item.price,
       quantity: item.quantity,
-      image: item.image,
+      images: item.images,
       brand: item.brand,
       availability: item.availability,
     },
   });
 
+  // Handle new image uploads
+  const handleUpload = (urls: string[]) => {
+    const updatedImages = [...imageUrls, ...urls];
+
+    setImageUrls(updatedImages);
+    setValue(
+      'images',
+      updatedImages.length > 0
+        ? ([updatedImages[0], ...updatedImages.slice(1)] as [
+            string,
+            ...string[]
+          ])
+        : []
+    );
+  };
+
+  // Handle image removal
+  const removeImage = (url: string) => {
+    const updatedImages = imageUrls.filter((img) => img !== url);
+
+    setImageUrls(updatedImages);
+    setValue(
+      'images',
+      updatedImages.length > 0
+        ? ([updatedImages[0], ...updatedImages.slice(1)] as [
+            string,
+            ...string[]
+          ])
+        : []
+    );
+
+    if (updatedImages.length > 0) {
+      setValue('images', updatedImages as [string, ...string[]]);
+    } else {
+      showToast({
+        title: 'At least one image is required!',
+        description: 'You must upload at least one image.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   // Handle form submission
   const handleUpdateSanitary = async (data: SanitaryFormValues) => {
-    console.log('data before sednigng the request ', data);
+    console.log('image urls');
+    if (imageUrls.length <= 0) {
+      showToast({
+        title: 'At least one image is required!',
+        description: 'You must upload at least one image.',
+        variant: 'destructive',
+      });
+      return;
+    }
     try {
       const response = await fetch(`/api/sanitary-items/${item.id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, images: imageUrls }),
       });
 
       if (response.ok) {
@@ -83,7 +133,7 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
     } catch (error) {
       showToast({
         title: 'Error',
-        description: `An error occurred while updating the sanitary item. ${error}`,
+        description: `An error occurred while updating the item. ${error}`,
         variant: 'destructive',
       });
     }
@@ -99,82 +149,56 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
           onSubmit={handleSubmit(handleUpdateSanitary)}
           className='space-y-4'
         >
-          <div>
-            <Input
-              placeholder='Enter item name'
-              {...register('name')}
-              className='bg-gray-100 text-gray-700'
-            />
-            {errors.name && (
-              <p className='text-red-500 text-sm'>
-                {String(errors.name.message)}
-              </p>
-            )}
-          </div>
-          <div>
-            <Input
-              placeholder='Enter category'
-              {...register('category')}
-              className='bg-gray-100 text-gray-700'
-            />
-            {errors.category && (
-              <p className='text-red-500 text-sm'>
-                {String(errors.category.message)}
-              </p>
-            )}
-          </div>
-          <div>
-            <Input
-              placeholder='Enter price'
-              {...register('price')}
-              className='bg-gray-100 text-gray-700'
-              type='text'
-              onChange={(e) =>
-                setValue('price', parseFloat(e.target.value) || 0)
-              }
-            />
-            {errors.price && (
-              <p className='text-red-500 text-sm'>{errors.price.message}</p>
-            )}
-          </div>
-          <div>
-            <Input
-              placeholder='Enter quantity'
-              {...register('quantity')}
-              className='bg-gray-100 text-gray-700'
-              type='text'
-              onChange={(e) =>
-                setValue('quantity', parseInt(e.target.value, 10) || 0)
-              }
-            />
-            {errors.quantity && (
-              <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
-            )}
-          </div>
-          <div>
-            <Input
-              placeholder='Enter image URL'
-              {...register('image')}
-              className='bg-gray-100 text-gray-700'
-            />
-            {errors.image && (
-              <p className='text-red-500 text-sm'>
-                {String(errors.image.message)}
-              </p>
-            )}
-          </div>
-          <div>
-            <Input
-              placeholder='Enter brand'
-              {...register('brand')}
-              className='bg-gray-100 text-gray-700'
-            />
-            {errors.brand && (
-              <p className='text-red-500 text-sm'>
-                {String(errors.brand.message)}
-              </p>
-            )}
-          </div>
+          <Input
+            placeholder='Enter item name'
+            {...register('name')}
+            className='bg-gray-100 text-gray-700'
+          />
+          {errors.name && (
+            <p className='text-red-500 text-sm'>{errors.name.message}</p>
+          )}
+
+          <Input
+            placeholder='Enter category'
+            {...register('category')}
+            className='bg-gray-100 text-gray-700'
+          />
+          {errors.category && (
+            <p className='text-red-500 text-sm'>{errors.category.message}</p>
+          )}
+
+          <Input
+            placeholder='Enter price'
+            {...register('price')}
+            className='bg-gray-100 text-gray-700'
+            type='number'
+            onChange={(e) => setValue('price', Number(e.target.value) || 0)}
+          />
+          {errors.price && (
+            <p className='text-red-500 text-sm'>{errors.price.message}</p>
+          )}
+
+          <Input
+            placeholder='Enter quantity'
+            {...register('quantity')}
+            className='bg-gray-100 text-gray-700'
+            type='number'
+            onChange={(e) => setValue('quantity', Number(e.target.value) || 0)}
+          />
+          {errors.quantity && (
+            <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
+          )}
+
+          <Input
+            placeholder='Enter brand'
+            {...register('brand')}
+            className='bg-gray-100 text-gray-700'
+          />
+          {errors.brand && (
+            <p className='text-red-500 text-sm'>{errors.brand.message}</p>
+          )}
+
+          {/* Availability Checkbox */}
           <div>
             <label className='block text-gray-600'>Availability</label>
             <input
@@ -183,6 +207,37 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
               className='mt-2'
             />
           </div>
+
+          {/* Display Existing Images with Remove Option */}
+          <div className='space-y-2'>
+            <label className='block text-gray-600'>Current Images</label>
+            <div className='flex flex-wrap gap-2'>
+              {imageUrls.map((url, index) => (
+                <div key={index} className='relative w-24 h-24'>
+                  <img
+                    src={url}
+                    alt={`Image ${index}`}
+                    className='w-full h-full rounded-lg object-cover'
+                  />
+                  <button
+                    type='button'
+                    className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-sm'
+                    onClick={() => removeImage(url)}
+                  >
+                    ❌
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Upload Button (Cloudinary) */}
+          <div>
+            <label className='block text-gray-600'>Upload New Images</label>
+            <CloudinaryUpload onUpload={handleUpload} />
+          </div>
+
+          {/* Buttons */}
           <div className='flex justify-end space-x-4'>
             <Button
               type='button'

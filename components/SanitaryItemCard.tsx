@@ -11,7 +11,7 @@ const SanitaryItemCard: React.FC<SanitaryItemCardProps> = ({ item }) => {
   return (
     <div className='bg-card text-foreground rounded-3xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 '>
       <Image
-        src={item.image || '/default-sanitary-image.jpg'} // Fallback image if item.image is not available
+        src={item.images[0] || '/rehan-sanitary.png'}
         alt={item.name}
         className='w-full h-64 object-cover mb-4'
         width={500}

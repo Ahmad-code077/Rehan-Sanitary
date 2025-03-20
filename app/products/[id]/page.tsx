@@ -62,7 +62,7 @@ const SingleSanitaryItem: React.FC = () => {
           <div className='flex-shrink-0 w-full md:w-1/2 flex justify-center items-center'>
             <Image
               className='w-full h-[400px] object-cover rounded-xl shadow-xl border-4 border-gray-700 transition-transform duration-500 transform hover:scale-105 '
-              src={item.image}
+              src={item.images[0] || '/rehan-sanitary.png'}
               alt={item.name}
               priority
               width={960}
@@ -73,13 +73,11 @@ const SingleSanitaryItem: React.FC = () => {
 
           {/* Content Section */}
           <div className='flex flex-col md:w-1/2'>
-            <h1 className='text-5xl font-extrabold text-white '>
-              {item.name} ({item.category})
-            </h1>
+            <h1 className='text-5xl font-extrabold text-white '>{item.name}</h1>
             <div className='space-y-6'>
               <div>
                 <h3 className='text-3xl font-semibold text-white mt-4'>
-                  Details:
+                  categorey: {item.category}
                 </h3>
                 <ul className='space-y-4 mt-2'>
                   <li className='text-lg text-gray-300'>
