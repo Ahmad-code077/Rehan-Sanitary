@@ -44,7 +44,7 @@ const SanitaryList = ({
                 <tr key={item.id} className='border-b border-border'>
                   <td className='px-4 py-2 flex items-center'>
                     <Image
-                      src={item.image}
+                      src={item.images[0] || '/rehan-sanitary.png'}
                       alt={item.name}
                       width={50}
                       height={50}

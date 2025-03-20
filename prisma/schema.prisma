@@ -13,7 +13,7 @@ model SanitaryItem {
   category    String
   price       Float
   quantity    Int
-  image       String
+  images       String[]
   brand       String
   availability Boolean
   createdAt   DateTime @default(now())

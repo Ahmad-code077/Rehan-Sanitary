@@ -64,6 +64,7 @@ export async function GET(req: Request) {
       where: filterConditions,
     });
 
+    console.log('items in the backend', items);
     return NextResponse.json({
       items,
       totalItems,
@@ -87,8 +88,10 @@ export async function GET(req: Request) {
 // POST /api/sanitary-items - Create a new sanitary item
 export async function POST(request: Request) {
   try {
-    const { name, category, price, quantity, image, brand, availability } =
+    const { name, category, price, quantity, images, brand, availability } =
       await request.json();
+    console.log('images in the api', images);
+    const imagesArray = Array.isArray(images) ? images : [images];
 
     const newSanitaryItem = await prisma.sanitaryItem.create({
       data: {
@@ -96,7 +99,7 @@ export async function POST(request: Request) {
         category,
         price,
         quantity,
-        image,
+        images: imagesArray,
         brand,
         availability,
       },
@@ -123,8 +126,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { name, category, price, quantity, image, brand, availability } =
+    const { name, category, price, quantity, images, brand, availability } =
       await request.json();
+    const imagesArray = Array.isArray(images) ? images : [images];
 
     const { id } = await params;
 
@@ -135,7 +139,7 @@ export async function PATCH(
         category,
         price,
         quantity,
-        image,
+        images: imagesArray,
         brand,
         availability,
       },

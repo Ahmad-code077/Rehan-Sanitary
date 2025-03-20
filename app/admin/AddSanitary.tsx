@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useShowToast } from '@/components/Toast';
+import ImageUploader from '@/components/CloudinaryUpload';
 
 // Define the schema for sanitary items
 const sanitarySchema = z.object({
@@ -14,7 +15,7 @@ const sanitarySchema = z.object({
   category: z.string().min(1, 'Category is required'),
   price: z.number().min(1, 'Price must be greater than 0'),
   quantity: z.number().min(1, 'Quantity must be greater than 0'),
-  image: z.string().url('Invalid image URL').min(1, 'Image URL is required'),
+  images: z.array(z.string()).nonempty('At least one image is required'),
   brand: z.string().min(1, 'Brand is required'),
   availability: z.boolean(),
 });
@@ -37,10 +38,22 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<SanitaryFormValues>({
     resolver: zodResolver(sanitarySchema),
+    defaultValues: {
+      images: [],
+    },
   });
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
 
+  const handleImageUpload = (urls: string[]) => {
+    setUploadedImageUrls((prevImages) => {
+      const updatedImages = [...prevImages, ...urls];
+      setValue('images', updatedImages as [string, ...string[]]); // Ensure at least one element
+      return updatedImages;
+    });
+  };
   // Handle form submission
   const handleAddSanitary = async (data: SanitaryFormValues) => {
     try {
@@ -49,7 +62,10 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          images: uploadedImageUrls, // Send images as an array
+        }),
       });
 
       if (response.ok) {
@@ -60,6 +76,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
         refreshSanitaryItems();
         onClose();
         reset();
+        setUploadedImageUrls([]);
       } else {
         showToast({
           title: 'Error Adding Item',
@@ -75,6 +92,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
       });
     }
   };
+  console.log('image url 😂😂😂😂 ', uploadedImageUrls);
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
@@ -127,7 +145,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
             )}
           </div>
-          <div>
+          {/* <div>
             <Input
               placeholder='Enter image URL'
               {...register('image')}
@@ -136,7 +154,19 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
             {errors.image && (
               <p className='text-red-500 text-sm'>{errors.image.message}</p>
             )}
-          </div>
+          </div> */}
+          {/* Image Upload Component */}
+          <ImageUploader onUpload={handleImageUpload} />
+
+          {/* Hidden input to store image URLs */}
+          <input
+            type='hidden'
+            {...register('images')}
+            value={JSON.stringify(uploadedImageUrls)} // Store as a JSON string
+          />
+          {errors.images && (
+            <p className='text-red-500 text-sm'>{errors.images.message}</p>
+          )}
           <div>
             <Input
               placeholder='Enter brand'

@@ -40,6 +40,7 @@ const AdminPage = () => {
         throw new Error('Failed to fetch sanitary items.');
       }
       const data: SanitaryItem[] = await response.json();
+      console.log('data', data);
       setSanitaryItems(data?.items);
       // setFilteredSanitaryItems(data); // Initialize filtered sanitary items
     } catch (error) {
