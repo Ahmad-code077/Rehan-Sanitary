@@ -19,18 +19,18 @@ const footerData = {
   contactDetails: [
     {
       label: 'Email',
-      value: 'wheelDeal@example.com',
-      href: 'mailto:wheelDeal@example.com',
+      value: 'rehanAkbar@gmail.com',
+      href: 'mailto:rehanAkbar@gmail.com',
     },
-    { label: 'Phone', value: '+92-321-555-1234' },
-    { label: 'Address', value: '123 Auto Street, Car City, PK' },
+    { label: 'Phone', value: '+92-320-3236515' },
+    { label: 'Address', value: 'Bahawalpur Pakistan' },
   ],
 };
 
 const Footer: React.FC = () => {
   return (
-    <footer className='bg-muted-800 text-white py-12 px-6 sm:px-16 border-t border-border mt-4'>
-      <div className='max-w-7xl mx-auto '>
+    <footer className='bg-background text-foreground py-12 px-6 sm:px-16 border-t border-border mt-4'>
+      <div className='max-w-7xl mx-auto'>
         {/* Footer Top Section */}
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-8'>
           {/* Navigation Links */}
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
           {/* Social Media Links */}
           <div>
             <h3 className='text-2xl font-semibold mb-4'>Follow Us</h3>
-            <div className='flex  gap-8'>
+            <div className='flex gap-8'>
               {footerData.socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
                 {contact.href ? (
                   <a
                     href={contact.href}
-                    className='text-primary hover:text-gray-300'
+                    className='text-primary hover:text-muted-foreground'
                   >
                     {contact.value}
                   </a>
@@ -87,9 +87,10 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Footer Bottom Section */}
-        <div className='border-t border-gray-600 pt-6'>
+        <div className='border-t border-border pt-6'>
           <p className='text-sm text-muted-foreground text-center'>
-            &copy; {new Date().getFullYear()} WheelDeal. All rights reserved.
+            &copy; {new Date().getFullYear()} Rehan Traders. All rights
+            reserved.
           </p>
         </div>
       </div>

@@ -1,29 +1,40 @@
+import Image from 'next/image';
+
 const HeroSection = () => {
   return (
-    <section
-      className='relative bg-cover bg-center text-white py-32 px-6 sm:px-16'
-      style={{
-        backgroundImage:
-          'url(https://static.vecteezy.com/system/resources/previews/039/617/725/non_2x/ai-generated-polished-shiny-beautiful-black-car-on-dark-isolated-background-for-website-or-print-design-generative-ai-free-photo.jpg)', // Replace with your actual image URL
-      }}
-    >
-      {/* Overlay for readability */}
-      <div className='absolute inset-0 bg-black opacity-70'></div>
+    <section className='relative flex flex-col lg:flex-row items-center h-auto mt-12'>
+      {/* Left Side - Text Content */}
+      <div className='flex-1 flex items-center justify-center py-12 lg:py-0 px-6 sm:px-16 bg-white lg:h-full'>
+        <div className='max-w-2xl text-center lg:text-left'>
+          <h1 className='text-3xl sm:text-5xl font-extrabold font-nunito text-gray-900 mb-6'>
+            Elevate Your Space with{' '}
+            <span className='text-primary'>Rehan. Traders</span>
+          </h1>
+          <p className='text-lg sm:text-xl text-gray-700'>
+            Discover a premium range of sanitary fittings, stylish bathroom
+            accessories, and high-quality fixtures. From elegant washbasins to
+            modern faucets, we bring innovation and luxury to your home.
+          </p>
+        </div>
+      </div>
 
-      {/* Content Section */}
-      <div className='relative z-10 max-w-7xl mx-auto text-center'>
-        <h1 className='text-5xl font-extrabold  mb-8'>
-          Discover Your Dream Car with{' '}
-          <span className='text-primary'> WheelDeal</span>
-        </h1>
-        <p className='text-lg sm:text-xl mb-12'>
-          Explore our premium selection of cars, designed for performance,
-          luxury, and innovation. Whether you&apos;re looking for a sleek sedan,
-          a robust SUV, or something in between, WheelDeal brings you closer to
-          your perfect vehicle.
-        </p>
+      {/* Right Side - Image Container */}
+      <div
+        className='flex-1 relative hidden lg:block w-full lg:h-full'
+        aria-hidden='true'
+      >
+        <Image
+          src='https://www.conceptvirtualdesign.com/wp-content/uploads/2024/06/LH-PEN-9280.webp'
+          alt='Modern Minimalist Bathroom'
+          width={600}
+          height={600}
+          priority
+          unoptimized
+          className='w-full h-full object-cover'
+        />
       </div>
     </section>
   );
 };
+
 export default HeroSection;

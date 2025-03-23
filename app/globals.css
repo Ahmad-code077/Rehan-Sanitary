@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,8 +9,8 @@ body {
 }
 
 @layer base {
-  :root {
-    --background: 20 14.3% 4.1%;
+  /* :root {
+    --background: ;
     --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
     --card-foreground: 0 0% 95%;
@@ -32,6 +34,42 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  } */
+  :root {
+    --background: 0 0% 100%; /* Pure white background */
+    --foreground: 240 10% 20%; /* Dark navy for text */
+
+    --card: 0 0% 98%; /* Off-white card background */
+    --card-foreground: 240 10% 20%; /* Dark navy for card text */
+
+    --popover: 0 0% 98%; /* Off-white popover background */
+    --popover-foreground: 240 10% 20%; /* Dark navy popover text */
+
+    --primary: 210 100% 35%; /* Deep professional blue */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+
+    --secondary: 220 14% 96%; /* Light gray for secondary elements */
+    --secondary-foreground: 240 10% 20%; /* Dark navy text */
+
+    --muted: 220 14% 90%; /* Soft gray for muted elements */
+    --muted-foreground: 240 5% 45%; /* Medium gray text */
+
+    --accent: 40 90% 55%; /* Gold accent for luxury touch */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+
+    --destructive: 0 84% 60%; /* Alert red */
+    --destructive-foreground: 0 0% 100%; /* White text */
+
+    --border: 220 14% 85%; /* Light gray borders */
+    --input: 220 14% 85%; /* Input borders */
+    --ring: 210 100% 35%; /* Focus ring matches primary */
+
+    /* Chart colors (desaturated for elegance) */
+    --chart-1: 210 100% 35%; /* Primary blue */
+    --chart-2: 40 90% 55%; /* Accent gold */
+    --chart-3: 160 60% 40%; /* Teal */
+    --chart-4: 280 65% 55%; /* Soft purple */
+    --chart-5: 340 75% 50%; /* Coral */
   }
 }
 

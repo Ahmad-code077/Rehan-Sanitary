@@ -9,26 +9,27 @@ interface SanitaryItemCardProps {
 
 const SanitaryItemCard: React.FC<SanitaryItemCardProps> = ({ item }) => {
   return (
-    <div className='bg-card text-foreground rounded-3xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300 '>
+    <div className='bg-card text-foreground rounded-3xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 duration-300'>
       <Image
         src={item.images[0] || '/rehan-sanitary.png'}
         alt={item.name}
         className='w-full h-64 object-cover mb-4'
         width={500}
         height={300}
-        unoptimized={true}
         loading='lazy'
       />
       <div className='p-4'>
         <h3 className='text-xl font-semibold'>{item.name}</h3>
         <p className='text-sm text-muted-foreground'>
-          Category: <span className='text-neutral-300'>{item.category}</span>
+          Category:{' '}
+          <span className='text-secondary-foreground'>{item.category}</span>
         </p>
         <p className='text-sm text-muted-foreground'>
-          Brand: <span className='text-neutral-300'>{item.brand}</span>
+          Brand: <span className='text-secondary-foreground'>{item.brand}</span>
         </p>
         <p className='text-sm text-muted-foreground'>
-          Price: <span className='text-neutral-300'>PKR {item.price}</span>
+          Price:{' '}
+          <span className='text-secondary-foreground'>PKR {item.price}</span>
         </p>
         <p
           className={`text-sm font-semibold ${

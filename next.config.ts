@@ -1,14 +1,23 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true, // Ensure this is enabled for the App Router
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+    ],
   },
-  rewrites: async () => [
-    {
-      source: '/api/:path*',
-      destination: '/api/:path*',
-    },
-  ],
+  webpack: (config) => {
+    // Enable top-level await
+    config.experiments = {
+      ...config.experiments,
+      topLevelAwait: true,
+    };
+
+    return config;
+  },
 };
 
 export default nextConfig;

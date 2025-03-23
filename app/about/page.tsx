@@ -1,106 +1,244 @@
 import React from 'react';
+import Image from 'next/image';
+import { Award, BadgeCheck, Leaf, Ruler } from 'lucide-react';
 
-// Array to map over for cards
 const aboutContent = [
   {
     title: 'Our Mission',
     description:
-      'Our mission is to provide cutting-edge solutions that create long-term value for our clients. We believe in pushing boundaries and delivering exceptional results.',
+      'To redefine bathroom experiences through innovative sanitary solutions that combine luxury, hygiene, and sustainable design.',
+    icon: <Ruler className='w-8 h-8 text-primary' />,
+    decoration: (
+      <div className='absolute inset-0 bg-gradient-to-br from-background via-secondary/10 to-background opacity-50' />
+    ),
   },
   {
     title: 'Our Vision',
     description:
-      'We envision a future where technology enables people and businesses to thrive in a rapidly changing world. We aim to be at the forefront of this transformation.',
+      'To be the global benchmark in premium sanitaryware, setting new standards in bathroom aesthetics and functionality.',
+    icon: <Award className='w-8 h-8 text-primary' />,
+    decoration: (
+      <div className='absolute inset-0 bg-gradient-to-br from-background via-accent/10 to-background opacity-50' />
+    ),
   },
   {
     title: 'Our Values',
     description:
-      'We value integrity, collaboration, and innovation. These core principles guide our work, ensuring that we consistently meet and exceed client expectations.',
+      'Quality craftsmanship, customer-centric innovation, and environmental responsibility guide every product we create.',
+    icon: <Leaf className='w-8 h-8 text-primary' />,
+    decoration: (
+      <div className='absolute inset-0 bg-gradient-to-br from-background via-primary/10 to-background opacity-50' />
+    ),
   },
 ];
 
 const AboutPage: React.FC = () => {
   return (
-    <div>
-      <section
-        className='relative bg-cover bg-center text-white py-24 px-6 sm:px-16'
-        style={{
-          backgroundImage:
-            'url(https://www.renault.ie/CountriesData/Ireland/images/cars/HELIOS/ConceptCars/GTVisionConcept/GTVisionConcept/renault-gt-vision-concept-001_ig_w600_h337.jpg)',
-        }}
-      >
-        {/* Overlay for better readability */}
-        <div className='absolute inset-0 bg-black opacity-40'></div>
+    <div className='min-h-screen bg-background'>
+      {/* Hero Section */}
+      <section className='relative h-96 md:h-screen/2'>
+        <div className='absolute inset-0 bg-black/30'></div>
+        <Image
+          src='/8.jpg'
+          alt='Luxury Bathroom Showroom'
+          fill
+          className='mix-blend-multiply'
+          priority
+          style={{ objectFit: 'cover' }}
+        />
+        <div className='relative z-10 max-w-7xl mx-auto h-full flex items-center px-4 sm:px-6 lg:px-8'>
+          <div className='text-center md:text-left space-y-6'>
+            <h1 className='text-4xl md:text-6xl font-light text-secondary'>
+              Crafting Bathroom{' '}
+              <span className='font-serif italic text-primary'>Elegance</span>
+            </h1>
+            <p className='text-lg md:text-xl text-secondary max-w-2xl'>
+              For over two decades, we&apos;ve been transforming bathrooms into
+              luxurious sanctuaries with our premium sanitaryware collections.
+            </p>
+          </div>
+        </div>
+      </section>
 
-        {/* Content Section */}
-        <div className='relative z-10 max-w-7xl mx-auto text-center'>
-          <h1 className='text-5xl font-extrabold text-primary mb-8'>
-            About Us
-          </h1>
-          <p className='text-lg text-gray-300 sm:text-xl'>
-            We are a forward-thinking company driven by innovation and a passion
-            for excellence. Our team specializes in delivering world-class
-            solutions that empower our clients and elevate their businesses.
-          </p>
-
-          {/* Card Section */}
-          <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-16'>
+      {/* Core Values Section */}
+      <section className='py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-background'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12'>
             {aboutContent.map((item, index) => (
               <div
                 key={index}
-                className={' text-white bg-card rounded-lg shadow-lg p-6'}
+                className='group relative p-8 bg-card rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-border overflow-hidden'
               >
-                <h3 className='text-2xl font-semibold mb-4 '>{item.title}</h3>
-                <p>{item.description}</p>
+                {item.decoration}
+                <div className='mb-8 flex items-center justify-center w-16 h-16 rounded-lg bg-gradient-to-br from-muted to-background border border-border'>
+                  <div className='text-foreground group-hover:text-primary transition-colors'>
+                    {item.icon}
+                  </div>
+                </div>
+
+                <div className='relative z-10'>
+                  <h3 className='text-2xl font-semibold text-foreground mb-4 flex items-center gap-2'>
+                    {item.title}
+                    <BadgeCheck className='w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity' />
+                  </h3>
+
+                  <p className='text-muted-foreground leading-relaxed text-base border-t border-border pt-4'>
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className='absolute inset-0 border-2 border-transparent group-hover:border-primary/10 rounded-xl transition-all pointer-events-none' />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Additional Content */}
-      <div className='mt-16 p-8 bg-background rounded-lg shadow-xl text-foreground'>
-        <h3 className='text-4xl font-semibold mb-6 text-primary'>
-          More About Us
-        </h3>
-        <p className='text-lg text-gray-300'>
-          At WheelDeal, we are passionate about providing the best car rental
-          and sales experience. With years of expertise in the automotive
-          industry, we have built a reputation for offering a wide selection of
-          high-quality vehicles, from luxury cars to reliable family sedans.
-          Whether you&apos;re looking to rent a car for a weekend getaway or
-          purchase your dream vehicle, we are committed to meeting your needs
-          with exceptional service and unbeatable prices.
-        </p>
+      {/* Company Story */}
+      <section className='py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-secondary/10'>
+        <div className='max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center'>
+          <div className='space-y-8'>
+            <h2 className='text-3xl md:text-4xl font-light text-foreground'>
+              Leading Suppliers of{' '}
+              <span className='font-serif italic text-primary'>
+                Premium Sanitary Solutions
+              </span>
+            </h2>
 
-        <div className='mt-8 flex flex-col sm:flex-row gap-8'>
-          {/* Our Story Card */}
-          <div className='bg-card text-white rounded-lg shadow-lg p-6'>
-            <h4 className='text-2xl font-semibold mb-4'>Our Story</h4>
-            <p className='text-white'>
-              Our journey began with a simple idea: to provide customers with an
-              easy and affordable way to access top-quality vehicles. Over the
-              years, we&apos;ve expanded our fleet, offering everything from
-              sports cars to SUVs, and even electric vehicles. Our commitment to
-              excellence has made us one of the most trusted names in the car
-              rental and sales industry.
+            <p className='text-muted-foreground leading-relaxed text-lg'>
+              Since 1998, Rehan Traders has been at the forefront of sanitary
+              equipment supply, providing top-quality products to residential
+              and commercial projects. Our expertise spans across:
             </p>
+
+            <ul className='grid grid-cols-2 gap-4 text-muted-foreground'>
+              <li className='flex items-start space-x-3'>
+                <svg
+                  className='w-5 h-5 text-primary mt-1 flex-shrink-0'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                >
+                  <path d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' />
+                </svg>
+                <span>
+                  <strong>Premium Taps & Faucets</strong>
+                  <br />
+                  Modern designs with water-saving technology
+                </span>
+              </li>
+
+              <li className='flex items-start space-x-3'>
+                <svg
+                  className='w-5 h-5 text-primary mt-1 flex-shrink-0'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                >
+                  <path d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' />
+                </svg>
+                <span>
+                  <strong>Sanitary Pipes</strong>
+                  <br />
+                  Durable, corrosion-resistant piping systems
+                </span>
+              </li>
+
+              <li className='flex items-start space-x-3'>
+                <svg
+                  className='w-5 h-5 text-primary mt-1 flex-shrink-0'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                >
+                  <path d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' />
+                </svg>
+                <span>
+                  <strong>Wash Basins</strong>
+                  <br />
+                  Elegant designs for modern bathrooms
+                </span>
+              </li>
+
+              <li className='flex items-start space-x-3'>
+                <svg
+                  className='w-5 h-5 text-primary mt-1 flex-shrink-0'
+                  fill='currentColor'
+                  viewBox='0 0 20 20'
+                >
+                  <path d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' />
+                </svg>
+                <span>
+                  <strong>Complete Solutions</strong>
+                  <br />
+                  End-to-end sanitary system installations
+                </span>
+              </li>
+            </ul>
           </div>
 
-          {/* Our Approach Card */}
-          <div className='bg-card text-white rounded-lg shadow-lg p-6'>
-            <h4 className='text-2xl font-semibold mb-4'>Our Approach</h4>
-            <p className='text-white'>
-              At WheelDeal, we prioritize our customers’ needs. We believe in
-              offering not just cars, but experiences. From a seamless online
-              booking process to exceptional customer service, we ensure that
-              your car rental or purchase journey is smooth, convenient, and
-              memorable. Our dedicated team is always available to assist you in
-              choosing the perfect vehicle for your needs.
-            </p>
+          <div className='relative h-96 rounded-xl overflow-hidden shadow-xl'>
+            <Image
+              src='/13.jpg'
+              alt='Rehan Traders Sanitary Products'
+              fill
+              sizes='(max-width: 768px) 100vw, 33vw'
+              style={{ objectFit: 'cover' }}
+              className='transform hover:scale-105 transition-all duration-500'
+            />
+            <div className='absolute inset-0 bg-gradient-to-b from-black/10 to-black/30'></div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Commitment Section */}
+      <section className='py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-background'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+            <div className='space-y-8 flex flex-col'>
+              <div className='bg-card p-8 rounded-xl shadow-lg border border-border flex-1 flex flex-col'>
+                <h3 className='text-2xl font-semibold text-foreground mb-4'>
+                  Quality Assurance
+                </h3>
+                <p className='text-muted-foreground flex-1'>
+                  Every product undergoes 27 quality checks using precision
+                  instruments to ensure perfect finish and optimal performance.
+                </p>
+              </div>
+
+              <div className='bg-card p-8 rounded-xl shadow-lg border border-border flex-1 flex flex-col'>
+                <h3 className='text-2xl font-semibold text-foreground mb-4'>
+                  Sustainable Practices
+                </h3>
+                <p className='text-muted-foreground flex-1'>
+                  Our eco-friendly manufacturing process saves 4.5 million
+                  liters of water annually while maintaining zero-waste
+                  production.
+                </p>
+              </div>
+            </div>
+
+            <div className='space-y-8 flex flex-col'>
+              <div className='bg-card p-8 rounded-xl shadow-lg border border-border flex-1 flex flex-col'>
+                <h3 className='text-2xl font-semibold text-foreground mb-4'>
+                  Global Standards
+                </h3>
+                <p className='text-muted-foreground flex-1'>
+                  Certified by ISO 9001, WaterSense, and ADA Compliance for
+                  exceptional quality and water efficiency.
+                </p>
+              </div>
+
+              <div className='bg-card p-8 rounded-xl shadow-lg border border-border flex-1 flex flex-col'>
+                <h3 className='text-2xl font-semibold text-foreground mb-4'>
+                  Design Expertise
+                </h3>
+                <p className='text-muted-foreground flex-1'>
+                  Our international design team creates collections that blend
+                  functionality with artistic expression.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

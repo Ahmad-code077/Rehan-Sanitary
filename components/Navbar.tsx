@@ -63,9 +63,9 @@ const Navbar = () => {
           <div className='flex-shrink-0 flex items-center'>
             <Link
               href='/'
-              className='text-2xl font-extrabold hover:text-primary transition-all'
+              className='text-2xl font-extrabold hover:text-primary font-nunito transition-all'
             >
-              WheelDeal
+              RTraders
             </Link>
           </div>
 
@@ -112,10 +112,10 @@ const Navbar = () => {
                 <SheetHeader>
                   <SheetTitle>
                     <Link
-                      className='font-extrabold hover:text-primary'
+                      className='font-extrabold hover:text-primary font-nunito'
                       href='/'
                     >
-                      WheelDeal
+                      RTraders
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
