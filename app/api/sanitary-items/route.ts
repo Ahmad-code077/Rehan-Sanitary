@@ -64,7 +64,6 @@ export async function GET(req: Request) {
       where: filterConditions,
     });
 
-    console.log('items in the backend', items);
     return NextResponse.json({
       items,
       totalItems,

@@ -88,99 +88,127 @@ const ProductPageSanitary: React.FC = () => {
   useEffect(() => {
     debouncedFetch();
   }, [page]);
-
   return (
-    <section className='text-white py-12 px-4'>
-      <h2 className='text-4xl font-bold text-center mb-8'>
-        Explore Our Sanitary Items
-      </h2>
-      <div className='mb-8 flex flex-wrap gap-4 justify-center'>
-        <button
-          onClick={resetFilters}
-          className='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors'
-        >
-          Reset Filters
-        </button>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger>
-            <SelectValue placeholder='All Categories' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='all'>All Categories</SelectItem>
-            <SelectItem value='Faucets'>Faucets</SelectItem>
-            <SelectItem value='Sinks'>Sinks</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={brand} onValueChange={setBrand}>
-          <SelectTrigger>
-            <SelectValue placeholder='All Brands' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='all'>All Brands</SelectItem>
-            <SelectItem value='Kohler'>Kohler</SelectItem>
-            <SelectItem value='Toto'>Toto</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={availability === null ? 'null' : availability.toString()}
-          onValueChange={(value) =>
-            setAvailability(value === 'null' ? null : value === 'true')
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder='Availability' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='null'>All</SelectItem>
-            <SelectItem value='true'>Available</SelectItem>
-            <SelectItem value='false'>Out of Stock</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={sortBy}
-          onValueChange={(value) =>
-            setSortBy(value as 'latest' | 'priceAsc' | 'priceDesc')
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder='Sort By' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='latest'>Latest</SelectItem>
-            <SelectItem value='priceAsc'>Price: Low to High</SelectItem>
-            <SelectItem value='priceDesc'>Price: High to Low</SelectItem>
-          </SelectContent>
-        </Select>
+    <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+      <div className='text-center mb-12'>
+        <h2 className='text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+          Explore Our Sanitary Collection
+        </h2>
+        <p className='text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
+          Discover high-quality sanitary items for your home
+        </p>
       </div>
 
-      {loading && items.length === 0 ? (
-        <p className='text-center text-xl text-gray-600'>
-          Loading sanitary items...
-        </p>
-      ) : items.length > 0 ? (
-        <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
-          {items.map((item) => (
-            <SanitaryItemCard key={item.id} item={item} />
-          ))}
+      {/* Filters Section */}
+      <div className='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-8'>
+        <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mb-6'>
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <button
+            onClick={resetFilters}
+            className='w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200'
+          >
+            Reset Filters
+          </button>
         </div>
+
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='All Categories' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='all'>All Categories</SelectItem>
+              <SelectItem value='Faucets'>Faucets</SelectItem>
+              <SelectItem value='Sinks'>Sinks</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={brand} onValueChange={setBrand}>
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='All Brands' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='all'>All Brands</SelectItem>
+              <SelectItem value='Kohler'>Kohler</SelectItem>
+              <SelectItem value='Toto'>Toto</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={availability === null ? 'null' : availability.toString()}
+            onValueChange={(value) =>
+              setAvailability(value === 'null' ? null : value === 'true')
+            }
+          >
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='Availability' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='null'>All</SelectItem>
+              <SelectItem value='true'>Available</SelectItem>
+              <SelectItem value='false'>Out of Stock</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={sortBy}
+            onValueChange={(value) =>
+              setSortBy(value as 'latest' | 'priceAsc' | 'priceDesc')
+            }
+          >
+            <SelectTrigger className='w-full'>
+              <SelectValue placeholder='Sort By' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='latest'>Latest</SelectItem>
+              <SelectItem value='priceAsc'>Price: Low to High</SelectItem>
+              <SelectItem value='priceDesc'>Price: High to Low</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Products Grid */}
+      {loading && items.length === 0 ? (
+        <div className='flex justify-center items-center h-64'>
+          <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500'></div>
+        </div>
+      ) : items.length > 0 ? (
+        <>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6'>
+            {items.map((item) => (
+              <SanitaryItemCard key={item.id} item={item} />
+            ))}
+          </div>
+          {hasMore && !loading && (
+            <div className='mt-8 text-center'>
+              <button
+                onClick={() => setPage((prev) => prev + 1)}
+                className='bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-200'
+              >
+                Load More
+              </button>
+            </div>
+          )}
+        </>
       ) : (
-        <p className='text-center text-gray-300'>
-          No items match your filters.
-        </p>
+        <div className='text-center py-12'>
+          <div className='text-gray-500 dark:text-gray-400 text-lg'>
+            No items match your filters.
+          </div>
+          <button
+            onClick={resetFilters}
+            className='mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200'
+          >
+            Reset Filters
+          </button>
+        </div>
       )}
 
-      {hasMore && !loading && (
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          className='bg-blue-500 text-white px-4 py-2 mt-4 rounded hover:bg-blue-600 transition-colors'
-        >
-          Load More
-        </button>
+      {loading && items.length > 0 && (
+        <div className='text-center py-4'>
+          <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 inline-block'></div>
+        </div>
       )}
     </section>
   );
