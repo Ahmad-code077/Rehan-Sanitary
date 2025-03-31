@@ -17,6 +17,8 @@ import { Button } from './ui/button';
 
 const ProductPageSanitary: React.FC = () => {
   const [items, setItems] = useState<SanitaryItem[]>([]);
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+  const [allBrands, setAllBrands] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [brand, setBrand] = useState('');
@@ -28,6 +30,20 @@ const ProductPageSanitary: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  // Fetch all possible filter options on mount
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        const response = await axios.get('/api/sanitary-items/filters');
+        setAllCategories(response.data.categories);
+        setAllBrands(response.data.brands);
+      } catch (err) {
+        console.error('Failed to fetch filter options:', err);
+      }
+    };
+    fetchFilterOptions();
+  }, []);
 
   const fetchSanitaryItems = async () => {
     setLoading(true);
@@ -42,7 +58,6 @@ const ProductPageSanitary: React.FC = () => {
         maxPrice: priceRange[1],
       };
 
-      // Only include brand and category if they are not 'all'
       if (brand !== 'all') {
         params.brand = brand;
       }
@@ -54,14 +69,14 @@ const ProductPageSanitary: React.FC = () => {
       setItems((prev) =>
         page === 1 ? response.data.items : [...prev, ...response.data.items]
       );
-      console.log('response from the server', response.data.items);
-      setHasMore(response.data.hasMore); // Use the hasMore from the response
+      setHasMore(response.data.hasMore);
     } catch (err) {
       console.log((err as AxiosError<{ error: string }>).message);
     } finally {
       setLoading(false);
     }
   };
+
   const debouncedFetch = useCallback(debounce(fetchSanitaryItems, 500), [
     searchTerm,
     category,
@@ -90,6 +105,7 @@ const ProductPageSanitary: React.FC = () => {
   useEffect(() => {
     debouncedFetch();
   }, [page]);
+
   return (
     <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
       <div className='text-center mb-12'>
@@ -121,8 +137,11 @@ const ProductPageSanitary: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='all'>All Categories</SelectItem>
-              <SelectItem value='Faucets'>Faucets</SelectItem>
-              <SelectItem value='Sinks'>Sinks</SelectItem>
+              {allCategories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -132,8 +151,11 @@ const ProductPageSanitary: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='all'>All Brands</SelectItem>
-              <SelectItem value='Kohler'>Kohler</SelectItem>
-              <SelectItem value='Toto'>Toto</SelectItem>
+              {allBrands.map((brand) => (
+                <SelectItem key={brand} value={brand}>
+                  {brand}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -178,7 +200,7 @@ const ProductPageSanitary: React.FC = () => {
         </div>
       ) : items.length > 0 ? (
         <>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {items.map((item) => (
               <SanitaryItemCard key={item.id} item={item} />
             ))}
