@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { SanitaryItem } from '@prisma/client';
 import SanitaryItemCard from './SanitaryItemCard';
+import { Button } from './ui/button';
 
 export default function HomePageSanitary() {
   const [items, setItems] = useState<SanitaryItem[]>([]);
@@ -49,12 +50,12 @@ export default function HomePageSanitary() {
       )}
 
       <div className='flex justify-center mt-8'>
-        <button
+        <Button
           onClick={() => router.push('/products')}
-          className='bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition-colors'
+          className=' text-white px-6 py-3 rounded text-lg'
         >
           See More
-        </button>
+        </Button>
       </div>
     </section>
   );

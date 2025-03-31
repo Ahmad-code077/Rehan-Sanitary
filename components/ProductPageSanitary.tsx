@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { SanitaryItem } from '@prisma/client';
 import { FetchParams } from '@/lib/types/siteTypes';
+import { Button } from './ui/button';
 
 const ProductPageSanitary: React.FC = () => {
   const [items, setItems] = useState<SanitaryItem[]>([]);
@@ -53,7 +54,8 @@ const ProductPageSanitary: React.FC = () => {
       setItems((prev) =>
         page === 1 ? response.data.items : [...prev, ...response.data.items]
       );
-      setHasMore(response.data.items.length > 0);
+      console.log('response from the server', response.data.items);
+      setHasMore(response.data.hasMore); // Use the hasMore from the response
     } catch (err) {
       console.log((err as AxiosError<{ error: string }>).message);
     } finally {
@@ -100,15 +102,16 @@ const ProductPageSanitary: React.FC = () => {
       </div>
 
       {/* Filters Section */}
-      <div className='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-8'>
+      <div className='bg-white dark:bg-gray-800 rounded-lg shadow-md p-2 sm:p-6 mb-8'>
         <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mb-6'>
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          <button
+          <Button
             onClick={resetFilters}
-            className='w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200'
+            variant='destructive'
+            className='w-full sm:w-auto rounded'
           >
             Reset Filters
-          </button>
+          </Button>
         </div>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
@@ -180,14 +183,14 @@ const ProductPageSanitary: React.FC = () => {
               <SanitaryItemCard key={item.id} item={item} />
             ))}
           </div>
-          {hasMore && !loading && (
+          {hasMore && (
             <div className='mt-8 text-center'>
-              <button
+              <Button
                 onClick={() => setPage((prev) => prev + 1)}
-                className='bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-200'
+                disabled={loading}
               >
-                Load More
-              </button>
+                {loading ? 'Loading...' : 'Load More'}
+              </Button>
             </div>
           )}
         </>
@@ -196,12 +199,9 @@ const ProductPageSanitary: React.FC = () => {
           <div className='text-gray-500 dark:text-gray-400 text-lg'>
             No items match your filters.
           </div>
-          <button
-            onClick={resetFilters}
-            className='mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200'
-          >
+          <Button onClick={resetFilters} className='mt-4 rounded'>
             Reset Filters
-          </button>
+          </Button>
         </div>
       )}
 

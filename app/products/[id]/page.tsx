@@ -43,7 +43,7 @@ const SingleSanitaryItem: React.FC = () => {
 
   if (loading)
     return (
-      <p className='text-center text-gray-300 text-lg font-medium shadow-lg p-6 rounded-lg'>
+      <p className='text-center text-gray-600 dark:text-gray-300 text-lg font-medium shadow-lg p-6 rounded-lg'>
         Loading...
       </p>
     );
@@ -55,13 +55,13 @@ const SingleSanitaryItem: React.FC = () => {
     );
 
   return (
-    <section className='p-8 mt-12 shadow-2xl rounded-xl'>
+    <section className='p-8 mt-12 shadow-2xl rounded-xl bg-white dark:bg-gray-800'>
       {item ? (
         <div className='flex flex-col md:flex-row gap-8'>
           {/* Image Section */}
           <div className='flex-shrink-0 w-full md:w-1/2 flex justify-center items-center'>
             <Image
-              className='w-full h-[400px] object-cover rounded-xl shadow-xl border-4 border-gray-700 transition-transform duration-500 transform hover:scale-105 '
+              className='w-full h-[400px] object-cover rounded-xl shadow-xl border-4 border-gray-200 dark:border-gray-700 transition-transform duration-500 transform hover:scale-105'
               src={item.images[0] || '/rehan-sanitary.png'}
               alt={item.name}
               priority
@@ -73,28 +73,29 @@ const SingleSanitaryItem: React.FC = () => {
 
           {/* Content Section */}
           <div className='flex flex-col md:w-1/2'>
-            <h1 className='text-5xl font-extrabold text-white '>{item.name}</h1>
+            <h1 className='text-5xl font-extrabold text-gray-900 dark:text-white'>
+              {item.name}
+            </h1>
             <div className='space-y-6'>
               <div>
-                <h3 className='text-3xl font-semibold text-white mt-4'>
-                  categorey: {item.category}
+                <h3 className='text-3xl font-semibold text-gray-800 dark:text-white mt-4'>
+                  Category: {item.category}
                 </h3>
                 <ul className='space-y-4 mt-2'>
-                  <li className='text-lg text-gray-300'>
+                  <li className='text-lg text-gray-700 dark:text-gray-300'>
                     <strong>Brand:</strong> {item.brand}
                   </li>
-                  {/* <li className='text-lg text-gray-300'>
-                    <strong>Type:</strong> {item.type}
-                  </li> */}
-                  <li className='text-lg text-gray-300'>
+                  <li className='text-lg text-gray-700 dark:text-gray-300'>
                     <strong>Price:</strong> PKR {item.price}
                   </li>
-                  <li className='text-lg text-gray-300'>
+                  <li className='text-lg text-gray-700 dark:text-gray-300'>
                     <strong>Quantity:</strong> {item.quantity}
                   </li>
                   <li
                     className={`text-lg font-semibold ${
-                      item.availability ? 'text-success' : 'text-destructive'
+                      item.availability
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-red-600 dark:text-red-400'
                     }`}
                   >
                     {item.availability ? 'Available' : 'Out of Stock'}
@@ -105,7 +106,7 @@ const SingleSanitaryItem: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p className='text-center text-gray-300 text-lg font-medium'>
+        <p className='text-center text-gray-600 dark:text-gray-300 text-lg font-medium'>
           Sanitary item not found.
         </p>
       )}

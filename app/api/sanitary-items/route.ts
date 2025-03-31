@@ -69,6 +69,7 @@ export async function GET(req: Request) {
       totalItems,
       page,
       totalPages: Math.ceil(totalItems / limit),
+      hasMore: page * limit < totalItems,
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
