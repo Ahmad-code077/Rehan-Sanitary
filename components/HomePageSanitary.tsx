@@ -48,15 +48,16 @@ export default function HomePageSanitary() {
           No sanitary items available.
         </p>
       )}
-
-      <div className='flex justify-center mt-8'>
-        <Button
-          onClick={() => router.push('/products')}
-          className=' text-white px-6 py-3 rounded text-lg'
-        >
-          See More
-        </Button>
-      </div>
+      {!loading && (
+        <div className='flex justify-center mt-8'>
+          <Button
+            onClick={() => router.push('/products')}
+            className=' text-white px-6 py-3 rounded text-lg'
+          >
+            See More
+          </Button>
+        </div>
+      )}
     </section>
   );
 }
