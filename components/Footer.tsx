@@ -19,8 +19,8 @@ const footerData = {
   contactDetails: [
     {
       label: 'Email',
-      value: 'rehanAkbar@gmail.com',
-      href: 'mailto:rehanAkbar@gmail.com',
+      value: 'rehanakbar737@gmail.com',
+      href: 'mailto:rehanakbar737@gmail.com',
     },
     { label: 'Phone', value: '+92-320-3236515' },
     { label: 'Address', value: 'Bahawalpur Pakistan' },
