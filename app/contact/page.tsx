@@ -8,17 +8,29 @@ import { ContactForm } from '@/components/contact/ContactForm';
 
 const Contact: React.FC = () => {
   return (
-    <section className='bg-white py-16'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <ContactHeader />
+    <section className=' bg-background py-8 sm:py-12 lg:py-16'>
+      <div className=''>
+        {/* Header with responsive padding */}
+        <div className='mb-8 sm:mb-12 lg:mb-16'>
+          <ContactHeader />
+        </div>
 
-        <div className='grid md:grid-cols-2 gap-12'>
-          <div className='space-y-8'>
-            <ContactInfoCard />
-            <SocialMediaLinks />
+        {/* Responsive grid container */}
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12'>
+          {/* Left column - Info cards */}
+          <div className='flex flex-col gap-6 sm:gap-8'>
+            <div className='w-full'>
+              <ContactInfoCard />
+            </div>
+            <div className='w-full'>
+              <SocialMediaLinks />
+            </div>
           </div>
 
-          <ContactForm />
+          {/* Right column - Contact form */}
+          <div className='w-full'>
+            <ContactForm />
+          </div>
         </div>
       </div>
     </section>

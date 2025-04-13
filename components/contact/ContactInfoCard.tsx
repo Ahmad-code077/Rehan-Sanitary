@@ -2,10 +2,10 @@ import { Phone, Mail, MapPin, Headphones } from 'lucide-react';
 
 export const ContactInfoCard = () => {
   return (
-    <div className='bg-amber-50 rounded-xl p-8 shadow-sm border border-amber-100'>
+    <div className='bg-background rounded-xl p-8 shadow-sm border border-border'>
       <div className='flex items-start gap-4 mb-6'>
-        <div className='bg-amber-100 p-3 rounded-lg'>
-          <Headphones className='w-6 h-6 text-amber-600' />
+        <div className=' p-3 '>
+          <Headphones className='w-6 h-6 text-primary' />
         </div>
         <div>
           <h3 className='text-xl font-semibold text-gray-900'>
@@ -19,8 +19,8 @@ export const ContactInfoCard = () => {
 
       <div className='space-y-6'>
         <div className='flex items-center gap-4'>
-          <div className='bg-white p-2 rounded-lg shadow-xs'>
-            <Phone className='w-5 h-5 text-amber-600' />
+          <div className=' p-3 '>
+            <Phone className='w-5 h-5 text-primary' />
           </div>
           <div>
             <p className='text-sm text-gray-500'>Phone Number</p>
@@ -29,8 +29,8 @@ export const ContactInfoCard = () => {
         </div>
 
         <div className='flex items-center gap-4'>
-          <div className='bg-white p-2 rounded-lg shadow-xs'>
-            <Mail className='w-5 h-5 text-amber-600' />
+          <div className='p-3'>
+            <Mail className='w-5 h-5 text-primary' />
           </div>
           <div>
             <p className='text-sm text-gray-500'>Email Address</p>
@@ -39,8 +39,8 @@ export const ContactInfoCard = () => {
         </div>
 
         <div className='flex items-start gap-4'>
-          <div className='bg-white p-2 rounded-lg shadow-xs'>
-            <MapPin className='w-5 h-5 text-amber-600' />
+          <div className='p-3 '>
+            <MapPin className='w-5 h-5 text-primary' />
           </div>
           <div>
             <p className='text-sm text-gray-500'>Our Location</p>

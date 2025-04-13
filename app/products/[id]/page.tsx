@@ -49,67 +49,95 @@ const SingleSanitaryItem: React.FC = () => {
     );
   if (error)
     return (
-      <p className='text-center text-red-600 dark:text-red-400 text-lg font-medium shadow-lg p-6 rounded-lg'>
+      <p className='text-center text-red-600 dark:text-red-400 text-2xl sm:text-5xl font-medium shadow-lg p-6 rounded-lg h-screen flex items-center justify-center'>
         Error: {error}
       </p>
     );
 
   return (
-    <section className='p-8 mt-12 shadow-2xl rounded-xl bg-white dark:bg-gray-800'>
-      {item ? (
-        <div className='flex flex-col md:flex-row gap-8'>
-          {/* Image Section */}
-          <div className='flex-shrink-0 w-full md:w-1/2 flex justify-center items-center'>
+    <section className='p-2 sm:p-8 my-12 rounded-3xl bg-card  border border-border/40 backdrop-blur-sm'>
+      <div className='flex flex-col md:flex-row gap-12'>
+        {/* Image Section */}
+        <div className='flex-shrink-0 w-full md:w-1/2'>
+          <div className='relative group'>
             <Image
-              className='w-full h-[400px] object-cover rounded-xl shadow-xl border-4 border-gray-200 dark:border-gray-700 transition-transform duration-500 transform hover:scale-105'
-              src={item.images[0] || '/rehan-sanitary.png'}
-              alt={item.name}
+              className='w-full h-[450px] object-cover rounded-2xl shadow-xl 
+                     border-2 border-border/50 transition-all duration-500 
+                     group-hover:shadow-2xl group-hover:shadow-primary/20'
+              src={item?.images[0] || '/rehan-sanitary.png'}
+              alt={item?.name as string}
               priority
               width={960}
               height={540}
               unoptimized={true}
             />
+            <div
+              className='absolute inset-0 rounded-2xl transition-opacity duration-500 
+                        bg-gradient-to-t from-background/80 via-background/0 to-transparent 
+                        opacity-0 group-hover:opacity-100'
+            />
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className='flex flex-col md:w-1/2 space-y-8'>
+          <div className='space-y-4'>
+            <h1
+              className='text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent 
+                       bg-clip-text text-transparent'
+            >
+              {item?.name}
+            </h1>
+            <h3 className='text-2xl font-medium text-muted-foreground'>
+              {item?.category}
+            </h3>
           </div>
 
-          {/* Content Section */}
-          <div className='flex flex-col md:w-1/2'>
-            <h1 className='text-5xl font-extrabold text-gray-900 dark:text-white'>
-              {item.name}
-            </h1>
-            <div className='space-y-6'>
-              <div>
-                <h3 className='text-3xl font-semibold text-gray-800 dark:text-white mt-4'>
-                  Category: {item.category}
-                </h3>
-                <ul className='space-y-4 mt-2'>
-                  <li className='text-lg text-gray-700 dark:text-gray-300'>
-                    <strong>Brand:</strong> {item.brand}
-                  </li>
-                  <li className='text-lg text-gray-700 dark:text-gray-300'>
-                    <strong>Price:</strong> PKR {item.price}
-                  </li>
-                  <li className='text-lg text-gray-700 dark:text-gray-300'>
-                    <strong>Quantity:</strong> {item.quantity}
-                  </li>
-                  <li
-                    className={`text-lg font-semibold ${
-                      item.availability
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-red-600 dark:text-red-400'
-                    }`}
-                  >
-                    {item.availability ? 'Available' : 'Out of Stock'}
-                  </li>
-                </ul>
+          <div className='grid gap-6 p-6 rounded-xl bg-secondary/50 backdrop-blur-sm'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <p className='text-sm font-medium text-muted-foreground'>
+                  Brand
+                </p>
+                <p className='text-lg font-semibold text-foreground'>
+                  {item?.brand}
+                </p>
+              </div>
+              <div className='space-y-2'>
+                <p className='text-sm font-medium text-muted-foreground'>
+                  Price
+                </p>
+                <p className='text-lg font-semibold text-primary'>
+                  PKR {item?.price.toLocaleString()}
+                </p>
+              </div>
+              <div className='space-y-2'>
+                <p className='text-sm font-medium text-muted-foreground'>
+                  Quantity
+                </p>
+                <p className='text-lg font-semibold text-foreground'>
+                  {item?.quantity}
+                </p>
+              </div>
+              <div className='space-y-2'>
+                <p className='text-sm font-medium text-muted-foreground'>
+                  Status
+                </p>
+                <span
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                          ${
+                            item?.availability
+                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                              : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                          }`}
+                >
+                  {item?.availability ? '● In Stock' : '● Out of Stock'}
+                </span>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <p className='text-center text-gray-600 dark:text-gray-300 text-lg font-medium'>
-          Sanitary item not found.
-        </p>
-      )}
+      </div>
     </section>
   );
 };

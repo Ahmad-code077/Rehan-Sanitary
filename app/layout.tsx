@@ -4,6 +4,8 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
+import { initEmailJS } from '@/lib/emailjs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,6 +30,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  initEmailJS();
   return (
     <html lang='en'>
       <body
@@ -35,6 +38,7 @@ export default function RootLayout({
       >
         <Navbar />
         <div className='max-w-6xl mx-auto px-4'>{children}</div>
+        <BackToTop />
         <Footer />
         <Toaster />
       </body>

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useShowToast } from '../Toast';
+import emailjs from '@emailjs/browser';
 
 // Define validation schema with Zod
 const formSchema = z.object({
@@ -32,7 +33,7 @@ export const ContactForm = () => {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,16 +49,28 @@ export const ContactForm = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Form submitted:', data);
+      const templateParams = {
+        from_name: `${data.firstName} ${data.lastName}`,
+        from_email: data.email,
+        phone_number: data.phone.replace(/\s+/g, ''), // Remove any spaces
+        message: data.message,
+        to_email: 'ahmadeveloper077@gmail.com',
+        time: new Date().toLocaleString(),
+      };
+      const response = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
 
-      // Show success toast
-      showToast({
-        title: 'Message Send Successfully ',
-        description: 'Your message was sent successfully',
-      });
-      // Reset form
-      reset();
+      if (response.status === 200) {
+        showToast({
+          title: 'Message Sent Successfully',
+          description:
+            'Thank you for contacting us. We will get back to you soon!',
+        });
+      }
     } catch (error) {
       console.error('Submission error:', error);
 
