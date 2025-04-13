@@ -25,6 +25,7 @@ interface User {
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const syncUserFromStorage = () => {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -56,6 +57,9 @@ const Navbar = () => {
     ? [...data, { id: 6, link: '/admin', title: 'Dashboard' }]
     : [...data, { id: 5, link: '/login', title: 'Login' }];
 
+  const handleSheetClose = () => {
+    setIsSheetOpen(false);
+  };
   return (
     <nav className='sticky top-0 left-0 w-full z-50 shadow-lg bg-background border-b border-border'>
       <div className='max-w-6xl mx-auto px-4'>
@@ -104,7 +108,8 @@ const Navbar = () => {
           )}
           <div className='flex md:hidden items-center gap-4 '>
             {/* Mobile Menu */}
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              {' '}
               <SheetTrigger>
                 <Menu className='md:hidden text-2xl' />
               </SheetTrigger>
@@ -113,6 +118,7 @@ const Navbar = () => {
                   <SheetTitle>
                     <Link
                       className='font-extrabold hover:text-primary font-nunito'
+                      onClick={handleSheetClose}
                       href='/'
                     >
                       RTraders
@@ -125,6 +131,7 @@ const Navbar = () => {
                       href={item.link}
                       key={item.id}
                       className='hover:text-primary border-b-2 py-4 transition-all duration-300'
+                      onClick={handleSheetClose}
                     >
                       {item.title}
                     </Link>

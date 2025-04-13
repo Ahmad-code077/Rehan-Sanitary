@@ -33,7 +33,7 @@ export const ContactForm = () => {
   const {
     register,
     handleSubmit,
-    // reset,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -56,7 +56,12 @@ export const ContactForm = () => {
         message: data.message,
         to_email: 'ahmadeveloper077@gmail.com',
         time: new Date().toLocaleString(),
+        subject: `New Inquiry from Rehan Sanitary - ${data.firstName} ${data.lastName}`,
+        website_name: 'Rehan Sanitary',
+        reply_to: data.email,
       };
+      emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+
       const response = await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
@@ -71,6 +76,7 @@ export const ContactForm = () => {
             'Thank you for contacting us. We will get back to you soon!',
         });
       }
+      reset();
     } catch (error) {
       console.error('Submission error:', error);
 
