@@ -195,7 +195,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
             </Button>
             <Button
               type='submit'
-              className='bg-secondary text-white hover:bg-secondary/90'
+              className='bg-primary text-white hover:bg-primary/90'
             >
               Add Item
             </Button>

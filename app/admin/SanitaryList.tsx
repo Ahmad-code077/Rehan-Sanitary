@@ -42,16 +42,15 @@ const SanitaryList = ({
             <tbody>
               {sanitaryItems.map((item) => (
                 <tr key={item.id} className='border-b border-border'>
-                  <td className='px-4 py-2 flex items-center'>
+                  <td className='w-[50px] h-[50px] rounded-full overflow-hidden mr-2'>
                     <Image
                       src={item.images[0] || '/rehan-sanitary.png'}
                       alt={item.name}
                       width={50}
                       height={50}
-                      className='rounded-full mr-2'
+                      className='object-cover'
                       unoptimized
                     />
-                    {item.name}
                   </td>
                   <td className='px-4 py-2'>{item.category}</td>
                   <td className='px-4 py-2'>{item.quantity}</td>

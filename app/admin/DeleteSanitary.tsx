@@ -50,7 +50,7 @@ const DeleteSanitaryPopup: React.FC<DeleteSanitaryPopupProps> = ({
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div className='bg-white rounded-lg shadow-md sm:w-[400px] p-6'>
-        <h2 className='text-xl font-bold text-secondary mb-4'>Are you sure?</h2>
+        <h2 className='text-xl font-bold text-primary mb-4'>Are you sure?</h2>
         <p className='text-gray-600 mb-6'>
           Do you really want to delete this sanitary item? This action cannot be
           undone.

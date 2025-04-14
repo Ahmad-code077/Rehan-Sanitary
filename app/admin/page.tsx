@@ -58,7 +58,7 @@ const AdminPage = () => {
         <Button
           onClick={() => setShowAddPopup(true)}
           size='lg'
-          className='hover:bg-secondary/90 transition-all duration-300 hover:scale-105 size-16 rounded-full text-white text-5xl'
+          className='hover:bg-primary/90 transition-all duration-300 hover:scale-105 size-16 rounded-full text-white text-5xl'
         >
           +
         </Button>
