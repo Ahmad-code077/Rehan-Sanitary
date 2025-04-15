@@ -11,6 +11,7 @@ import { useShowToast } from '@/components/Toast';
 import { SanitaryItem } from '@prisma/client';
 import CloudinaryUpload from '@/components/CloudinaryUpload';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 // Validation schema
 const sanitarySchema = z.object({
@@ -277,10 +278,12 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
             <div className='flex flex-wrap gap-2'>
               {imageUrls.map((url, index) => (
                 <div key={index} className='relative w-24 h-24'>
-                  <img
+                  <Image
                     src={url}
                     alt={`Product image ${index + 1}`}
-                    className='w-full h-full rounded-lg object-cover'
+                    fill
+                    className='rounded-lg object-cover'
+                    sizes='96px'
                   />
                   <button
                     type='button'

@@ -10,6 +10,7 @@ import { useShowToast } from '@/components/Toast';
 import ImageUploader from '@/components/CloudinaryUpload';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 // Define the schema for sanitary items
 const sanitarySchema = z.object({
@@ -234,21 +235,30 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <div className='grid grid-cols-3 gap-2'>
                 {uploadedImageUrls.map((url, index) => (
                   <div key={index} className='relative aspect-square group'>
-                    <img
+                    <Image
                       src={url}
                       alt={`Preview ${index + 1}`}
-                      className='object-cover w-full h-full rounded-lg'
+                      fill
+                      sizes='(max-width: 768px) 33vw, 25vw'
+                      className='object-cover rounded-lg transition-transform duration-200 
+              group-hover:scale-105'
+                      priority={index === 0}
                     />
                     <button
                       type='button'
                       onClick={() => handleRemoveImage(index)}
                       className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 
-                         flex items-center justify-center shadow-md 
-                         transition-opacity opacity-0 group-hover:opacity-100'
+              flex items-center justify-center shadow-md z-10
+              transition-all duration-200 opacity-0 group-hover:opacity-100
+              hover:bg-red-600 hover:scale-110'
                       aria-label={`Remove image ${index + 1}`}
                     >
                       ×
                     </button>
+                    <div
+                      className='absolute inset-0 bg-black/10 rounded-lg opacity-0 
+                  group-hover:opacity-100 transition-opacity duration-200'
+                    />
                   </div>
                 ))}
               </div>
