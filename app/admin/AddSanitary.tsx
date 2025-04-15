@@ -96,7 +96,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-      <div className='bg-white rounded-lg shadow-md sm:w-[400px] p-6'>
+      <div className='p-6 bg-white rounded-lg shadow-md sm:w-[400px] w-[90%] max-h-[90vh] overflow-y-auto scrollbar-hide'>
         <h2 className='text-2xl font-semibold text-gray-600 mb-4'>
           Add New Sanitary Item
         </h2>

@@ -7,15 +7,21 @@ import AddSanitary from './AddSanitary'; // Updated component name
 import { Button } from '@/components/ui/button';
 import SearchBar from '@/components/SearchBar';
 import { SanitaryItem } from '@prisma/client';
+import Loader from '@/components/Loader';
 
 const AdminPage = () => {
   const router = useRouter();
-  const [sanitaryItems, setSanitaryItems] = useState<SanitaryItem[]>([]); // Updated state variable
-  // const [filteredSanitaryItems, setFilteredSanitaryItems] = useState<
-  // SanitaryItem[]
-  // >([]); // Updated state variable
+  const [sanitaryItems, setSanitaryItems] = useState<SanitaryItem[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showAddPopup, setShowAddPopup] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const filteredItems = sanitaryItems.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.brand.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -34,6 +40,8 @@ const AdminPage = () => {
 
   // Fetch sanitary items
   const fetchSanitaryItems = async () => {
+    setIsLoading(true);
+
     try {
       const response = await fetch(`/api/sanitary-items`); // Updated API endpoint
       if (!response.ok) {
@@ -44,6 +52,8 @@ const AdminPage = () => {
       // setFilteredSanitaryItems(data); // Initialize filtered sanitary items
     } catch (error) {
       console.error('Error fetching sanitary items:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,14 +79,20 @@ const AdminPage = () => {
       </div>
       {/* Sanitary Items List Section */}
       <div>
-        {sanitaryItems.length > 0 ? (
+        {isLoading ? (
+          <div className='flex justify-center items-center min-h-[400px]'>
+            <Loader />
+          </div>
+        ) : filteredItems.length > 0 ? (
           <SanitaryList
-            sanitaryItems={sanitaryItems}
-            refreshSanitaryItems={fetchSanitaryItems} // Updated prop name
+            sanitaryItems={filteredItems}
+            refreshSanitaryItems={fetchSanitaryItems}
           />
         ) : (
           <p className='text-center text-gray-500'>
-            No sanitary items match your search. {/* Updated message */}
+            {searchTerm
+              ? `No items found matching "${searchTerm}"`
+              : 'No sanitary items available.'}{' '}
           </p>
         )}
       </div>

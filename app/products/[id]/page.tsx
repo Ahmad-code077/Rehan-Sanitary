@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { SanitaryItem } from '@prisma/client';
+import Loader from '@/components/Loader';
 
 const SingleSanitaryItem: React.FC = () => {
   const [item, setItem] = useState<SanitaryItem | null>(null);
@@ -41,12 +42,8 @@ const SingleSanitaryItem: React.FC = () => {
     fetchSanitaryItem();
   }, [id]);
 
-  if (loading)
-    return (
-      <p className='text-center text-gray-600 dark:text-gray-300 text-lg font-medium shadow-lg p-6 rounded-lg'>
-        Loading...
-      </p>
-    );
+  if (loading) return <Loader />;
+
   if (error)
     return (
       <p className='text-center text-red-600 dark:text-red-400 text-2xl sm:text-5xl font-medium shadow-lg p-6 rounded-lg h-screen flex items-center justify-center'>

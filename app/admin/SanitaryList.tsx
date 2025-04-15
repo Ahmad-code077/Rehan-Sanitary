@@ -3,6 +3,9 @@ import Image from 'next/image';
 import UpdateSanitaryPopup from './UpdateSanitaryPopup';
 import DeleteSanitary from './DeleteSanitary';
 import { SanitaryItem } from '@prisma/client';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import Link from 'next/link';
 
 interface SanitaryListProps {
   sanitaryItems: SanitaryItem[];
@@ -18,67 +21,84 @@ const SanitaryList = ({
   );
 
   return (
-    <div className='py-6'>
+    <div className='py-6 px-4'>
       {sanitaryItems.length > 0 ? (
-        <div className='overflow-x-auto'>
-          <table className='min-w-full table-auto'>
-            <thead>
-              <tr className='bg-secondary'>
-                <th className='px-4 py-2 text-left text-foreground'>Item</th>
-                <th className='px-4 py-2 text-left text-foreground'>
-                  Category
-                </th>
-                <th className='px-4 py-2 text-left text-foreground'>
-                  Quantity
-                </th>
-                <th className='px-4 py-2 text-left text-foreground'>Price</th>
-                <th className='px-4 py-2 text-left text-foreground'>Brand</th>
-                <th className='px-4 py-2 text-left text-foreground'>
-                  Availability
-                </th>
-                <th className='px-4 py-2 text-left text-foreground'>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sanitaryItems.map((item) => (
-                <tr key={item.id} className='border-b border-border'>
-                  <td className='w-[50px] h-[50px] rounded-full overflow-hidden mr-2'>
-                    <Image
-                      src={item.images[0] || '/rehan-sanitary.png'}
-                      alt={item.name}
-                      width={50}
-                      height={50}
-                      className='object-cover'
-                      unoptimized
-                    />
-                  </td>
-                  <td className='px-4 py-2'>{item.category}</td>
-                  <td className='px-4 py-2'>{item.quantity}</td>
-                  <td className='px-4 py-2'>${item.price}</td>
-                  <td className='px-4 py-2'>{item.brand}</td>
-                  <td className='px-4 py-2'>
-                    {item.availability ? 'Available' : 'Not Available'}
-                  </td>
-                  <td className='px-4 py-2'>
-                    <button
-                      onClick={() => setSelectedSanitary(item)}
-                      className='px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-secondary-dark focus:ring-offset-2 transition-all'
-                    >
-                      Update
-                    </button>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          {sanitaryItems.map((item) => (
+            <Card
+              key={item.id}
+              className='overflow-hidden hover:shadow-lg transition-shadow'
+            >
+              {/* Image Section */}
+              <div className='relative h-48 w-full'>
+                <Image
+                  src={item.images[0] || '/rehan-sanitary.png'}
+                  alt={item.name}
+                  fill
+                  className='object-cover'
+                  unoptimized
+                />
+                <Badge
+                  variant={item.availability ? 'default' : 'destructive'}
+                  className='absolute top-2 right-2'
+                >
+                  {item.availability ? 'Available' : 'Out of Stock'}
+                </Badge>
+              </div>
 
-                    <DeleteSanitary
-                      itemId={item.id}
-                      refreshSanitaryItems={refreshSanitaryItems}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              {/* Content Section */}
+              <CardContent className='p-4 space-y-4'>
+                <div className='space-y-2'>
+                  <Link
+                    href={`/products/${item.id}`}
+                    className='font-semibold text-lg line-clamp-1 text-primary transition-colors hover:underline'
+                  >
+                    {item.name}
+                  </Link>
+                  <div className='flex items-center justify-between'>
+                    <Badge variant='outline'>{item.category}</Badge>
+                    <span className='font-bold text-primary'>
+                      ${item.price}
+                    </span>
+                  </div>
+                </div>
+
+                <div className='space-y-1 text-sm text-muted-foreground'>
+                  <div className='flex justify-between'>
+                    <span>Brand:</span>
+                    <span className='font-medium text-foreground'>
+                      {item.brand}
+                    </span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span>Quantity:</span>
+                    <span className='font-medium text-foreground'>
+                      {item.quantity} units
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+
+              {/* Actions Section */}
+              <CardFooter className='p-4 bg-muted/50 flex gap-2'>
+                <button
+                  onClick={() => setSelectedSanitary(item)}
+                  className='flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg 
+                           hover:bg-primary/90 focus:outline-none focus:ring-2 
+                           focus:ring-primary/50 transition-all text-sm'
+                >
+                  Update
+                </button>
+                <DeleteSanitary
+                  itemId={item.id}
+                  refreshSanitaryItems={refreshSanitaryItems}
+                />
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       ) : (
-        <p className='text-gray-300 text-center'>
+        <p className='text-muted-foreground text-center mt-8'>
           No sanitary items available.
         </p>
       )}

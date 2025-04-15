@@ -1,9 +1,9 @@
-import HomePageSanitary from '@/components/ProductPageSanitary';
+import ProductPageSanitary from '@/components/ProductPageSanitary';
 
 const page = () => {
   return (
     <div>
-      <HomePageSanitary />
+      <ProductPageSanitary />
     </div>
   );
 };

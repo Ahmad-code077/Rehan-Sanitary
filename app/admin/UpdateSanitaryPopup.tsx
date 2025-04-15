@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { useShowToast } from '@/components/Toast';
 import { SanitaryItem } from '@prisma/client';
 import CloudinaryUpload from '@/components/CloudinaryUpload';
+import { Loader2 } from 'lucide-react';
 
 // Validation schema
 const sanitarySchema = z.object({
@@ -37,6 +38,8 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
 }) => {
   const showToast = useShowToast();
   const [imageUrls, setImageUrls] = useState<string[]>(item.images || []);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -109,6 +112,8 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
       });
       return;
     }
+    setIsLoading(true); // Start loading
+
     try {
       const response = await fetch(`/api/sanitary-items/${item.id}`, {
         method: 'PATCH',
@@ -136,12 +141,14 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
         description: `An error occurred while updating the item. ${error}`,
         variant: 'destructive',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
-      <div className='bg-white rounded-lg shadow-md sm:w-[400px] p-6'>
+      <div className=' p-6 bg-white rounded-lg shadow-md sm:w-[400px] w-[90%] max-h-[90vh] overflow-y-auto scrollbar-hide'>
         <h2 className='text-2xl font-semibold text-gray-600 mb-4'>
           Update Sanitary Item
         </h2>
@@ -149,80 +156,137 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
           onSubmit={handleSubmit(handleUpdateSanitary)}
           className='space-y-4'
         >
-          <Input
-            placeholder='Enter item name'
-            {...register('name')}
-            className='bg-gray-100 text-gray-700'
-          />
-          {errors.name && (
-            <p className='text-red-500 text-sm'>{errors.name.message}</p>
-          )}
+          {/* Name Input */}
+          <div className='space-y-2'>
+            <label
+              htmlFor='name'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Item Name
+            </label>
+            <Input
+              id='name'
+              placeholder='Enter item name'
+              {...register('name')}
+              className='bg-gray-100 text-gray-700'
+            />
+            {errors.name && (
+              <p className='text-red-500 text-sm'>{errors.name.message}</p>
+            )}
+          </div>
 
-          <Input
-            placeholder='Enter category'
-            {...register('category')}
-            className='bg-gray-100 text-gray-700'
-          />
-          {errors.category && (
-            <p className='text-red-500 text-sm'>{errors.category.message}</p>
-          )}
+          {/* Category Input */}
+          <div className='space-y-2'>
+            <label
+              htmlFor='category'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Category
+            </label>
+            <Input
+              id='category'
+              placeholder='Enter category'
+              {...register('category')}
+              className='bg-gray-100 text-gray-700'
+            />
+            {errors.category && (
+              <p className='text-red-500 text-sm'>{errors.category.message}</p>
+            )}
+          </div>
 
-          <Input
-            placeholder='Enter price'
-            {...register('price')}
-            className='bg-gray-100 text-gray-700'
-            type='number'
-            onChange={(e) => setValue('price', Number(e.target.value) || 0)}
-          />
-          {errors.price && (
-            <p className='text-red-500 text-sm'>{errors.price.message}</p>
-          )}
+          {/* Price Input */}
+          <div className='space-y-2'>
+            <label
+              htmlFor='price'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Price (PKR)
+            </label>
+            <Input
+              id='price'
+              placeholder='Enter price'
+              {...register('price')}
+              className='bg-gray-100 text-gray-700'
+              type='number'
+              onChange={(e) => setValue('price', Number(e.target.value) || 0)}
+            />
+            {errors.price && (
+              <p className='text-red-500 text-sm'>{errors.price.message}</p>
+            )}
+          </div>
 
-          <Input
-            placeholder='Enter quantity'
-            {...register('quantity')}
-            className='bg-gray-100 text-gray-700'
-            type='number'
-            onChange={(e) => setValue('quantity', Number(e.target.value) || 0)}
-          />
-          {errors.quantity && (
-            <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
-          )}
+          {/* Quantity Input */}
+          <div className='space-y-2'>
+            <label
+              htmlFor='quantity'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Quantity (Units)
+            </label>
+            <Input
+              id='quantity'
+              placeholder='Enter quantity'
+              {...register('quantity')}
+              className='bg-gray-100 text-gray-700'
+              type='number'
+              onChange={(e) =>
+                setValue('quantity', Number(e.target.value) || 0)
+              }
+            />
+            {errors.quantity && (
+              <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
+            )}
+          </div>
 
-          <Input
-            placeholder='Enter brand'
-            {...register('brand')}
-            className='bg-gray-100 text-gray-700'
-          />
-          {errors.brand && (
-            <p className='text-red-500 text-sm'>{errors.brand.message}</p>
-          )}
+          {/* Brand Input */}
+          <div className='space-y-2'>
+            <label
+              htmlFor='brand'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Brand Name
+            </label>
+            <Input
+              id='brand'
+              placeholder='Enter brand name'
+              {...register('brand')}
+              className='bg-gray-100 text-gray-700'
+            />
+            {errors.brand && (
+              <p className='text-red-500 text-sm'>{errors.brand.message}</p>
+            )}
+          </div>
 
           {/* Availability Checkbox */}
-          <div>
-            <label className='block text-gray-600'>Availability</label>
-            <input
-              type='checkbox'
-              {...register('availability')}
-              className='mt-2'
-            />
+          <div className='space-y-2'>
+            <label className='flex items-center gap-2 text-sm font-medium text-gray-700'>
+              <input
+                type='checkbox'
+                {...register('availability')}
+                className='w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary'
+              />
+              <span>Item is available in stock</span>
+            </label>
           </div>
 
           {/* Display Existing Images with Remove Option */}
           <div className='space-y-2'>
-            <label className='block text-gray-600'>Current Images</label>
+            <label className='block text-sm font-medium text-gray-700'>
+              Current Images
+            </label>
             <div className='flex flex-wrap gap-2'>
               {imageUrls.map((url, index) => (
                 <div key={index} className='relative w-24 h-24'>
                   <img
                     src={url}
-                    alt={`Image ${index}`}
+                    alt={`Product image ${index + 1}`}
                     className='w-full h-full rounded-lg object-cover'
                   />
                   <button
                     type='button'
                     className='absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-sm'
                     onClick={() => removeImage(url)}
+                    aria-label={`Remove image ${index + 1}`}
                   >
                     ❌
                   </button>
@@ -232,13 +296,15 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
           </div>
 
           {/* Upload Button (Cloudinary) */}
-          <div>
-            <label className='block text-gray-600'>Upload New Images</label>
+          <div className='space-y-2'>
+            <label className='block text-sm font-medium text-gray-700'>
+              Upload New Images
+            </label>
             <CloudinaryUpload onUpload={handleUpload} />
           </div>
 
-          {/* Buttons */}
-          <div className='flex justify-end space-x-4'>
+          {/* Action Buttons */}
+          <div className='flex justify-end space-x-4 pt-4'>
             <Button
               type='button'
               className='bg-gray-300 text-gray-700 hover:bg-gray-400'
@@ -249,8 +315,16 @@ const UpdateSanitaryPopup: React.FC<UpdateSanitaryPopupProps> = ({
             <Button
               type='submit'
               className='bg-primary text-white hover:bg-primary/90'
+              disabled={isLoading}
             >
-              Update Item
+              {isLoading ? (
+                <>
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  Updating...
+                </>
+              ) : (
+                'Update Item'
+              )}
             </Button>
           </div>
         </form>

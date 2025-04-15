@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { SanitaryItem } from '@prisma/client';
 import SanitaryItemCard from './SanitaryItemCard';
 import { Button } from './ui/button';
+import Loader from './Loader';
 
 export default function HomePageSanitary() {
   const [items, setItems] = useState<SanitaryItem[]>([]);
@@ -36,7 +37,7 @@ export default function HomePageSanitary() {
       </h2>
 
       {loading ? (
-        <p className='text-center text-xl text-gray-600'>Loading items...</p>
+        <Loader />
       ) : items.length > 0 ? (
         <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
           {items.map((item) => (

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { ContactHeader } from '@/components/contact/ContactHeader';
 import { ContactInfoCard } from '@/components/contact/ContactInfoCard';
