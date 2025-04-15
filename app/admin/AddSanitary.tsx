@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useShowToast } from '@/components/Toast';
 import ImageUploader from '@/components/CloudinaryUpload';
+import { Label } from '@/components/ui/label';
+import { Loader2 } from 'lucide-react';
 
 // Define the schema for sanitary items
 const sanitarySchema = z.object({
@@ -46,6 +48,7 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
     },
   });
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleImageUpload = (urls: string[]) => {
     setUploadedImageUrls((prevImages) => {
@@ -56,6 +59,10 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
   };
   // Handle form submission
   const handleAddSanitary = async (data: SanitaryFormValues) => {
+    if (isSubmitting) return; // Prevent multiple submissions
+
+    setIsSubmitting(true);
+
     try {
       const response = await fetch(`/api/sanitary-items`, {
         method: 'POST',
@@ -90,9 +97,28 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
         description: `An error occurred while adding the sanitary item. ${error}`,
         variant: 'destructive',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   console.log('image url 😂😂😂😂 ', uploadedImageUrls);
+  const handleRemoveImage = (indexToRemove: number) => {
+    setUploadedImageUrls((prevImages) => {
+      const updatedImages = prevImages.filter(
+        (_, index) => index !== indexToRemove
+      );
+      setValue('images', updatedImages as [string, ...string[]]);
+      return updatedImages;
+    });
+
+    if (uploadedImageUrls.length <= 1) {
+      showToast({
+        title: 'Image Required',
+        description: 'At least one image is required for the product.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
@@ -101,8 +127,11 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
           Add New Sanitary Item
         </h2>
         <form onSubmit={handleSubmit(handleAddSanitary)} className='space-y-4'>
-          <div>
+          {/* Name Input */}
+          <div className='space-y-2'>
+            <Label htmlFor='name'>Item Name</Label>
             <Input
+              id='name'
               placeholder='Enter item name'
               {...register('name')}
               className='bg-gray-100 text-gray-700'
@@ -111,8 +140,12 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.name.message}</p>
             )}
           </div>
-          <div>
+
+          {/* Category Input */}
+          <div className='space-y-2'>
+            <Label htmlFor='category'>Category</Label>
             <Input
+              id='category'
               placeholder='Enter category'
               {...register('category')}
               className='bg-gray-100 text-gray-700'
@@ -121,8 +154,12 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.category.message}</p>
             )}
           </div>
-          <div>
+
+          {/* Price Input */}
+          <div className='space-y-2'>
+            <Label htmlFor='price'>Price (PKR)</Label>
             <Input
+              id='price'
               placeholder='Enter price'
               {...register('price', { valueAsNumber: true })}
               className='bg-gray-100 text-gray-700'
@@ -133,8 +170,12 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.price.message}</p>
             )}
           </div>
-          <div>
+
+          {/* Quantity Input */}
+          <div className='space-y-2'>
+            <Label htmlFor='quantity'>Quantity (Units)</Label>
             <Input
+              id='quantity'
               placeholder='Enter quantity'
               {...register('quantity', { valueAsNumber: true })}
               className='bg-gray-100 text-gray-700'
@@ -145,30 +186,12 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.quantity.message}</p>
             )}
           </div>
-          {/* <div>
-            <Input
-              placeholder='Enter image URL'
-              {...register('image')}
-              className='bg-gray-100 text-gray-700'
-            />
-            {errors.image && (
-              <p className='text-red-500 text-sm'>{errors.image.message}</p>
-            )}
-          </div> */}
-          {/* Image Upload Component */}
-          <ImageUploader onUpload={handleImageUpload} />
 
-          {/* Hidden input to store image URLs */}
-          <input
-            type='hidden'
-            {...register('images')}
-            value={JSON.stringify(uploadedImageUrls)} // Store as a JSON string
-          />
-          {errors.images && (
-            <p className='text-red-500 text-sm'>{errors.images.message}</p>
-          )}
-          <div>
+          {/* Brand Input */}
+          <div className='space-y-2'>
+            <Label htmlFor='brand'>Brand Name</Label>
             <Input
+              id='brand'
               placeholder='Enter brand'
               {...register('brand')}
               className='bg-gray-100 text-gray-700'
@@ -177,27 +200,84 @@ const AddSanitaryPopup: React.FC<AddSanitaryPopupProps> = ({
               <p className='text-red-500 text-sm'>{errors.brand.message}</p>
             )}
           </div>
-          <div>
-            <label className='block text-gray-600'>Availability</label>
-            <input
-              type='checkbox'
-              {...register('availability')}
-              className='mt-2'
-            />
+
+          {/* Availability Checkbox */}
+          <div className='space-y-2'>
+            <Label className='flex items-center gap-2 cursor-pointer'>
+              <input
+                type='checkbox'
+                {...register('availability')}
+                className='w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary'
+              />
+              <span>Item is available in stock</span>
+            </Label>
           </div>
-          <div className='flex justify-end space-x-4'>
+
+          {/* Image Upload Section */}
+          <div className='space-y-2'>
+            <Label>Product Images</Label>
+            <ImageUploader onUpload={handleImageUpload} />
+            <input
+              type='hidden'
+              {...register('images')}
+              value={JSON.stringify(uploadedImageUrls)}
+            />
+            {errors.images && (
+              <p className='text-red-500 text-sm'>{errors.images.message}</p>
+            )}
+          </div>
+
+          {/* Preview Uploaded Images */}
+          {uploadedImageUrls.length > 0 && (
+            <div className='space-y-2'>
+              <Label>Uploaded Images</Label>
+              <div className='grid grid-cols-3 gap-2'>
+                {uploadedImageUrls.map((url, index) => (
+                  <div key={index} className='relative aspect-square group'>
+                    <img
+                      src={url}
+                      alt={`Preview ${index + 1}`}
+                      className='object-cover w-full h-full rounded-lg'
+                    />
+                    <button
+                      type='button'
+                      onClick={() => handleRemoveImage(index)}
+                      className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 
+                         flex items-center justify-center shadow-md 
+                         transition-opacity opacity-0 group-hover:opacity-100'
+                      aria-label={`Remove image ${index + 1}`}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className='flex justify-end space-x-4 pt-4'>
             <Button
               type='button'
               className='bg-gray-300 text-gray-700 hover:bg-gray-400'
               onClick={onClose}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
               type='submit'
               className='bg-primary text-white hover:bg-primary/90'
+              disabled={isSubmitting}
             >
-              Add Item
+              {isSubmitting ? (
+                <>
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  Adding...
+                </>
+              ) : (
+                'Add Item'
+              )}{' '}
             </Button>
           </div>
         </form>

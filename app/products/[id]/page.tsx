@@ -10,6 +10,8 @@ const SingleSanitaryItem: React.FC = () => {
   const [item, setItem] = useState<SanitaryItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<number>(0);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -55,17 +57,19 @@ const SingleSanitaryItem: React.FC = () => {
     <section className='p-2 sm:p-8 my-12 rounded-3xl bg-card  border border-border/40 backdrop-blur-sm'>
       <div className='flex flex-col md:flex-row gap-12'>
         {/* Image Section */}
-        <div className='flex-shrink-0 w-full md:w-1/2'>
-          <div className='relative group'>
+
+        <div className='flex-shrink-0 w-full md:w-1/2 space-y-4'>
+          {/* Main Image */}
+          <div className='relative group aspect-square'>
             <Image
-              className='w-full h-[450px] object-cover rounded-2xl shadow-xl 
+              className='w-full h-full object-cover rounded-2xl shadow-xl 
                      border-2 border-border/50 transition-all duration-500 
                      group-hover:shadow-2xl group-hover:shadow-primary/20'
-              src={item?.images[0] || '/rehan-sanitary.png'}
+              src={item?.images[selectedImage] || '/rehan-sanitary.png'}
               alt={item?.name as string}
               priority
-              width={960}
-              height={540}
+              fill
+              sizes='(max-width: 768px) 100vw, 50vw'
               unoptimized={true}
             />
             <div
@@ -74,6 +78,32 @@ const SingleSanitaryItem: React.FC = () => {
                         opacity-0 group-hover:opacity-100'
             />
           </div>
+
+          {/* Thumbnails - Only show if there are multiple images */}
+          {item?.images && item.images.length > 1 && (
+            <div className='grid grid-cols-4 gap-2 pt-4'>
+              {item.images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                    selectedImage === index
+                      ? 'border-primary ring-2 ring-primary/20'
+                      : 'border-border/50 hover:border-primary/50'
+                  }`}
+                >
+                  <Image
+                    src={img}
+                    alt={`${item.name} view ${index + 1}`}
+                    fill
+                    className='object-cover'
+                    sizes='(max-width: 768px) 25vw, 15vw'
+                    unoptimized={true}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
