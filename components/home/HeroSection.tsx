@@ -6,7 +6,7 @@ const HeroSection = () => {
       {/* Left Side - Text Content */}
       <div className='flex-1 flex items-center justify-center py-12 lg:py-0 px-6 sm:px-16 bg-white lg:h-full'>
         <div className='max-w-2xl text-center lg:text-left'>
-          <h1 className='text-3xl sm:text-5xl font-extrabold font-nunito text-gray-900 mb-6'>
+          <h1 className='text-3xl sm:text-5xl font-extrabold font-nunito text-gray-900 mb-6 '>
             Elevate Your Space with{' '}
             <span className='text-primary'>Rehan. Traders</span>
           </h1>

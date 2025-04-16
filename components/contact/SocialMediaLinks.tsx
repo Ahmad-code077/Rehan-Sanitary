@@ -1,10 +1,4 @@
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  LucideIcon,
-} from 'lucide-react';
+import { Facebook, Instagram, Linkedin, LucideIcon } from 'lucide-react';
 
 interface SocialLink {
   id: number;
@@ -18,28 +12,22 @@ const socialLinks: SocialLink[] = [
   {
     id: 1,
     icon: Facebook,
-    href: 'https://facebook.com',
+    href: 'https://www.facebook.com/share/18hca6yUVd/',
     name: 'Facebook',
     hoverColor: 'hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200',
   },
-  {
-    id: 2,
-    icon: Twitter,
-    href: 'https://twitter.com',
-    name: 'Twitter',
-    hoverColor: 'hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200',
-  },
+
   {
     id: 3,
     icon: Instagram,
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/rehantraders708',
     name: 'Instagram',
     hoverColor: 'hover:bg-pink-50 hover:text-pink-600 hover:border-pink-200',
   },
   {
     id: 4,
     icon: Linkedin,
-    href: 'https://linkedin.com',
+    href: 'https://www.linkedin.com/in/rehan-akbar-a35620349/',
     name: 'Linkedin',
     hoverColor: 'hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200',
   },
@@ -48,7 +36,7 @@ const socialLinks: SocialLink[] = [
 export const SocialMediaLinks = () => {
   return (
     <div className='bg-card rounded-xl p-8 shadow-lg border border-border/50 backdrop-blur-sm '>
-      <h3 className='text-2xl font-bold text-foreground mb-6 bg-gradient-to-r from-primary to-primary/80 bg-clip-text '>
+      <h3 className='text-2xl font-bold text-foreground mb-6 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-center '>
         Connect With Us
       </h3>
       <div className='flex gap-4 items-center justify-center flex-wrap'>

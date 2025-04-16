@@ -7,29 +7,45 @@ import * as z from 'zod';
 import { useShowToast } from '../Toast';
 import emailjs from '@emailjs/browser';
 
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '../ui/textarea';
+
 // Define validation schema with Zod
 const formSchema = z.object({
-  firstName: z.string().min(2, {
-    message: 'First name must be at least 2 characters',
-  }),
-  lastName: z.string().min(2, {
-    message: 'Last name must be at least 2 characters',
-  }),
-  email: z.string().email({
-    message: 'Please enter a valid email address',
-  }),
-  phone: z.string().min(10, {
-    message: 'Phone number must be at least 10 digits',
-  }),
-  message: z.string().min(10, {
-    message: 'Message must be at least 10 characters',
-  }),
+  firstName: z
+    .string()
+    .min(2, { message: 'First name must be at least 2 characters' }),
+  lastName: z
+    .string()
+    .min(2, { message: 'Last name must be at least 2 characters' }),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  phone: z
+    .string()
+    .min(10, { message: 'Phone number must be at least 10 digits' })
+    .transform((val) => val.replace(/\D/g, '')) // remove all non-digits
+    .transform((val) => {
+      // If starts with 03 -> convert to 92 (international format)
+      if (val.startsWith('03') && val.length === 11) {
+        return '92' + val.slice(1);
+      }
+      return val;
+    })
+    .refine((val) => /^92\d{10}$/.test(val), {
+      message: 'Enter a valid Pakistani phone number',
+    }),
+
+  message: z
+    .string()
+    .min(10, { message: 'Message must be at least 10 characters' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export const ContactForm = () => {
   const showToast = useShowToast();
+
   const {
     register,
     handleSubmit,
@@ -48,18 +64,19 @@ export const ContactForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      // Simulate API call
       const templateParams = {
         from_name: `${data.firstName} ${data.lastName}`,
-        from_email: data.email,
-        phone_number: data.phone.replace(/\s+/g, ''), // Remove any spaces
+        from_email: data.email, // included as custom value
+        reply_to: data.email,
+        phone_number: data.phone.replace(/\s+/g, ''),
         message: data.message,
-        to_email: 'ahmadeveloper077@gmail.com',
+        to_email: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
         time: new Date().toLocaleString(),
         subject: `New Inquiry from Rehan Sanitary - ${data.firstName} ${data.lastName}`,
         website_name: 'Rehan Sanitary',
-        reply_to: data.email,
       };
+
+      console.log('data email ', data.email);
       emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
 
       const response = await emailjs.send(
@@ -79,8 +96,6 @@ export const ContactForm = () => {
       reset();
     } catch (error) {
       console.error('Submission error:', error);
-
-      // Show error toast
       showToast({
         title: 'Error Sending Message',
         description: 'There was an issue while sending your message',
@@ -101,16 +116,10 @@ export const ContactForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
         <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
           <div>
-            <label
-              htmlFor='firstName'
-              className='block text-sm font-medium text-gray-700 mb-1'
-            >
-              First Name
-            </label>
-            <input
+            <Label htmlFor='firstName'>First Name</Label>
+            <Input
               id='firstName'
               {...register('firstName')}
-              className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
               placeholder='John'
             />
             {errors.firstName && (
@@ -120,18 +129,8 @@ export const ContactForm = () => {
             )}
           </div>
           <div>
-            <label
-              htmlFor='lastName'
-              className='block text-sm font-medium text-gray-700 mb-1'
-            >
-              Last Name
-            </label>
-            <input
-              id='lastName'
-              {...register('lastName')}
-              className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
-              placeholder='Doe'
-            />
+            <Label htmlFor='lastName'>Last Name</Label>
+            <Input id='lastName' {...register('lastName')} placeholder='Doe' />
             {errors.lastName && (
               <p className='mt-1 text-sm text-red-600'>
                 {errors.lastName.message}
@@ -141,17 +140,11 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label
-            htmlFor='email'
-            className='block text-sm font-medium text-gray-700 mb-1'
-          >
-            Email
-          </label>
-          <input
+          <Label htmlFor='email'>Email</Label>
+          <Input
             id='email'
             type='email'
             {...register('email')}
-            className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
             placeholder='you@example.com'
           />
           {errors.email && (
@@ -160,37 +153,28 @@ export const ContactForm = () => {
         </div>
 
         <div>
-          <label
-            htmlFor='phone'
-            className='block text-sm font-medium text-gray-700 mb-1'
-          >
-            Phone Number
-          </label>
-          <input
+          <Label htmlFor='phone'>Phone Number</Label>
+          <Input
             id='phone'
             {...register('phone')}
-            className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
-            placeholder='+92 300 1234567'
+            inputMode='tel'
+            pattern='[\d\s+\-]*'
+            placeholder='+92 321 6832148'
           />
+
           {errors.phone && (
             <p className='mt-1 text-sm text-red-600'>{errors.phone.message}</p>
           )}
         </div>
 
         <div>
-          <label
-            htmlFor='message'
-            className='block text-sm font-medium text-gray-700 mb-1'
-          >
-            Your Inquiry
-          </label>
-          <textarea
+          <Label htmlFor='message'>Your Inquiry</Label>
+          <Textarea
             id='message'
             rows={4}
             {...register('message')}
-            className='w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500'
             placeholder='Tell us about your business needs...'
-          ></textarea>
+          />
           {errors.message && (
             <p className='mt-1 text-sm text-red-600'>
               {errors.message.message}
@@ -198,18 +182,14 @@ export const ContactForm = () => {
           )}
         </div>
 
-        <div>
-          <button
-            type='submit'
-            disabled={isSubmitting}
-            className={`w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2 ${
-              isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
-            }`}
-          >
-            <MessageSquare className='w-5 h-5' />
-            {isSubmitting ? 'Sending...' : 'Send Inquiry'}
-          </button>
-        </div>
+        <Button
+          type='submit'
+          disabled={isSubmitting}
+          className='w-full flex items-center gap-2'
+        >
+          <MessageSquare className='w-5 h-5' />
+          {isSubmitting ? 'Sending...' : 'Send Inquiry'}
+        </Button>
       </form>
     </div>
   );

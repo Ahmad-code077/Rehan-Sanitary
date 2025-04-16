@@ -1,26 +1,44 @@
 'use client';
 
 import React from 'react';
-import { Facebook, Twitter, Instagram, Github } from 'lucide-react';
+import { Facebook, Instagram, Github, MessageCircleCode } from 'lucide-react';
 import Link from 'next/link';
 
+const phoneNumber = '923203236515';
 const footerData = {
   quickLinks: [
     { name: 'Home', href: '/' },
     { name: 'Contact Us', href: '/contact' },
+    { name: 'Products', href: '/products' },
     { name: 'About', href: '/about' },
   ],
   socialLinks: [
-    { name: 'Facebook', url: 'https://facebook.com', icon: <Facebook /> },
-    { name: 'Twitter', url: 'https://twitter.com', icon: <Twitter /> },
-    { name: 'Instagram', url: 'https://instagram.com', icon: <Instagram /> },
-    { name: 'GitHub', url: 'https://github.com', icon: <Github /> },
+    {
+      name: 'Facebook',
+      url: 'https://www.facebook.com/share/18hca6yUVd/',
+      icon: <Facebook />,
+    },
+    {
+      name: 'Instagram',
+      url: 'https://www.instagram.com/rehantraders708',
+      icon: <Instagram />,
+    },
+    {
+      name: 'GitHub',
+      url: 'https://github.com/Ahmad-code077',
+      icon: <Github />,
+    },
+    {
+      name: 'Whatsapp',
+      url: `https://wa.me/${phoneNumber}`,
+      icon: <MessageCircleCode />,
+    },
   ],
   contactDetails: [
     {
       label: 'Email',
-      value: 'rehanakbar737@gmail.com',
-      href: 'mailto:rehanakbar737@gmail.com',
+      value: 'rehanTraders708@gmail.com',
+      href: 'mailto:rehanTraders708@gmail.com',
     },
     { label: 'Phone', value: '+92-320-3236515' },
     { label: 'Address', value: 'Bahawalpur Pakistan' },

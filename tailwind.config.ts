@@ -11,7 +11,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        nunito: ['Nunito', 'sans-serif'], // Register the font
+        nunito: ['p', 'sans-serif'], // Register the font
       },
 
       colors: {

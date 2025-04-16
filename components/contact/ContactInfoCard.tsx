@@ -34,7 +34,9 @@ export const ContactInfoCard = () => {
           </div>
           <div>
             <p className='text-sm text-gray-500'>Email Address</p>
-            <p className='font-medium text-gray-900'>rehanakbar737@gmail.com</p>
+            <p className='font-medium text-gray-900'>
+              rehantraders708@gmail.com
+            </p>
           </div>
         </div>
 
