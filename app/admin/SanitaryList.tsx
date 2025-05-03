@@ -58,7 +58,7 @@ const SanitaryList = ({
                   <div className='flex items-center justify-between'>
                     <Badge variant='outline'>{item.category}</Badge>
                     <span className='font-bold text-primary'>
-                      ${item.price}
+                      PKR {item.price}
                     </span>
                   </div>
                 </div>
